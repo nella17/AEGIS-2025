@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 from pwn import *
 
-BIN_PATH = "./netdiag"
+BIN_PATH = "./netdiag-1331"
 
 exe = context.binary = BIN_PATH
-# context.log_level = "debug"  # uncomment while developing
+context.log_level = "debug"  # uncomment while developing
 
 
 def start():
@@ -83,16 +83,16 @@ class NetDiagClient:
         )
 
         # ping count
-        if count is None:
-            self.io.sendlineafter(b"Enter ping count", b"")
-        else:
-            self.io.sendlineafter(b"Enter ping count", str(count).encode())
+        #if count is None:
+        #    self.io.sendlineafter(b"Enter ping count", b"")
+        #else:
+        #    self.io.sendlineafter(b"Enter ping count", str(count).encode())
 
-        # timeout ms
-        if timeout_ms is None:
-            self.io.sendlineafter(b"Enter timeout in ms", b"")
-        else:
-            self.io.sendlineafter(b"Enter timeout in ms", str(timeout_ms).encode())
+        ## timeout ms
+        #if timeout_ms is None:
+        #    self.io.sendlineafter(b"Enter timeout in ms", b"")
+        #else:
+        #    self.io.sendlineafter(b"Enter timeout in ms", str(timeout_ms).encode())
 
         # It will run the custom ICMP ping and then redisplay the main menu
         return self._recv_main_menu()
@@ -210,7 +210,7 @@ class NetDiagClient:
         """
         self._enter_config_manager()
         self.io.sendline(b"5")
-        self.io.sendlineafter(b"Enter log level", lvl.encode())
+        self.io.sendafter(b"Enter log level", lvl.encode())
         return self._recv_main_menu()
 
     def config_list(self):
@@ -245,27 +245,24 @@ if __name__ == "__main__":
     io = start()
     nd = NetDiagClient(io)
 
-    # --- example usage / quick smoke test ---
-
-    # 1. Custom ICMP ping using defaults (hit enter for all prompts)
     nd.ping_custom(host=None, count=None, timeout_ms=None)
 
-    # 2. System ping to 127.0.0.1 with explicit parameters
     nd.ping_system(host="127.0.0.1", count=1, timeout_ms=500)
 
-    # 3. Generate a JSON report
-    nd.generate_report("json")
+    nd.generate_report("text")
 
-    # 4. Tweak configuration values
     nd.config_update_gateway("1.1.1.1")
-    nd.config_update_ping_count(4)
-    nd.config_update_timeout(1500)
-    nd.config_update_report_format("csv")
+    nd.config_update_ping_count(1)
+    nd.config_update_timeout(100)
+    nd.config_update_report_format("text")
     nd.config_update_log_level("debug")
 
-    # 5. Read back the current configuration block
-    cfg = nd.config_list()
-    print(cfg.decode(errors="ignore"))
+    for i in range(0x100):
+        nd.ping_system(host="127.0.0.1", count=1, timeout_ms=100)
 
+
+    #cfg = nd.config_list()
+    #print(cfg.decode(errors="ignore"))
+    io.interactive()
     # 6. Cleanly exit
     nd.quit()
