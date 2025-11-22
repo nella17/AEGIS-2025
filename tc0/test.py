@@ -14,6 +14,8 @@ libc = ELF("./libc.so.6") if args.REMOTE else exe.libc
 HOST, PORT = "192.168.0.211", 1337
 if os.getenv("container"):
     HOST = "host.containers.internal"
+if os.getenv("SSH_CONNECTION"):
+    HOST = "127.0.0.1"
 TOKEN = "e0474f5b11ef48439fec9f14c439c514"
 
 
@@ -23,8 +25,11 @@ def start():
       python exploit.py REMOTE
     """
     if args.REMOTE:
-        io = remote(HOST, PORT)
-        io.sendlineafter(b"please input hash value: ", TOKEN)
+        host = args.HOST or HOST
+        port = int(args.PORT or PORT)
+        token = args.TOKEN or TOKEN
+        io = remote(host, port)
+        io.sendlineafter(b"please input hash value: ", token)
         io.sendlineafter(b"option :", b"4")
         return io
     else:

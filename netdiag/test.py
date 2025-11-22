@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 from pwn import *
 
-BIN_PATH = "./netdiag-1331"
+BIN_PATH = args.BINARY or "./netdiag"
 
 exe = context.binary = BIN_PATH
-context.log_level = "debug"  # uncomment while developing
+#  context.log_level = "debug"  # uncomment while developing
+
+HOST, PORT = "192.168.0.211", 1337
+if os.getenv("container"):
+    HOST = "host.containers.internal"
+if os.getenv("SSH_CONNECTION"):
+    HOST = "127.0.0.1"
+TOKEN = "e0474f5b11ef48439fec9f14c439c514"
 
 
 def start():
@@ -16,9 +23,12 @@ def start():
       python3 script.py REMOTE=1 HOST=challenge HOST=1337
     """
     if args.REMOTE:
-        host = args.HOST or "localhost"
-        port = int(args.PORT or 1337)
+        host = args.HOST or HOST
+        port = int(args.PORT or PORT)
+        token = args.TOKEN or TOKEN
         io = remote(host, port)
+        io.sendlineafter(b"please input hash value: ", token)
+        io.sendlineafter(b"option :", b"4")
         return io
     else:
         return process(BIN_PATH)
@@ -83,15 +93,15 @@ class NetDiagClient:
         )
 
         # ping count
-        #if count is None:
+        # if count is None:
         #    self.io.sendlineafter(b"Enter ping count", b"")
-        #else:
+        # else:
         #    self.io.sendlineafter(b"Enter ping count", str(count).encode())
 
         ## timeout ms
-        #if timeout_ms is None:
+        # if timeout_ms is None:
         #    self.io.sendlineafter(b"Enter timeout in ms", b"")
-        #else:
+        # else:
         #    self.io.sendlineafter(b"Enter timeout in ms", str(timeout_ms).encode())
 
         # It will run the custom ICMP ping and then redisplay the main menu
@@ -260,9 +270,8 @@ if __name__ == "__main__":
     for i in range(0x100):
         nd.ping_system(host="127.0.0.1", count=1, timeout_ms=100)
 
-
-    #cfg = nd.config_list()
-    #print(cfg.decode(errors="ignore"))
+    # cfg = nd.config_list()
+    # print(cfg.decode(errors="ignore"))
     io.interactive()
     # 6. Cleanly exit
     nd.quit()
