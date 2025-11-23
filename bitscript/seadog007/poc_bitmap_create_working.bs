@@ -1,0 +1,39 @@
+# POC: Bitmap Create - Working Version (No Hex Literals)
+# Bitscript only supports decimal integers, not hex literals
+#
+# The bounds check limits width * height to maximum 8388608 (0x800000)
+# So we can't directly exploit the overflow, but we can test edge cases
+
+# Test 1: Values just under the limit
+# IMPORTANT: create() returns a bitmap, not an int!
+bitmap b1 = create(4096, 2047);
+# 4096 * 2047 = 8,384,512 < 8,388,608, so it passes
+set(b1, 0, 0, 1);
+int val1 = get(b1, 0, 0);
+print(val1);
+
+# Test 2: Values at the exact limit
+# 8388608 * 1 = 8388608 (exactly at limit)
+# Check: 8388608 > 8388608 = false, so it should pass
+bitmap b2 = create(8388608, 1);
+set(b2, 0, 0, 1);
+int val2 = get(b2, 0, 0);
+print(val2);
+
+# Test 3: Large width, small height
+bitmap b3 = create(8388607, 1);
+set(b3, 0, 0, 1);
+int val3 = get(b3, 0, 0);
+print(val3);
+
+# Test 4: Square bitmap near limit
+# sqrt(8388608) ≈ 2896, so try 2896 * 2896 = 8,386,816
+# This is > 8388608, so it should fail
+# Try slightly smaller: 2895 * 2895 = 8,381,025 < 8388608
+bitmap b4 = create(2895, 2895);
+set(b4, 0, 0, 1);
+int val4 = get(b4, 0, 0);
+print(val4);
+
+print("All tests completed");
+

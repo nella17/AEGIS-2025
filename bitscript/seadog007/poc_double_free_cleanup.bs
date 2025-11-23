@@ -1,0 +1,17 @@
+print("=== Double Free During Cleanup ===");
+
+string s1 = "first";
+string s2 = "second";
+s2 = s1;
+
+print("Both s1 and s2 point to same string struct");
+print("Script will complete, then crash during cleanup");
+print("when both variables try to free the same struct");
+
+print("s1:");
+print(s1);
+print("s2:");
+print(s2);
+
+print("Script completed - crash should occur during cleanup");
+

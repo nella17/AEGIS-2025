@@ -1,0 +1,44 @@
+# POC 3: Integer Overflow in replace bounds check
+# Vulnerability: replace() bounds check can be bypassed via integer overflow
+# 
+# The vulnerability exists in the code at line 275:
+#   if ( (signed __int64)(n + v26) > *v20 )
+# 
+# However, this is protected by an earlier check at line 269:
+#   if ( v26 >= *v20 )  // position >= string_length
+#
+# This makes direct exploitation difficult because:
+# 1. Position must be < string_length to pass first check
+# 2. But then position + replacement_length won't overflow
+#
+# The vulnerability could be exploited if:
+# - String length is manipulated (requires memory corruption)
+# - Or if there's a way to bypass the first check
+# - Or with negative position values (if they're allowed)
+
+# Create a small string
+string s = "hello";
+
+# Attempt 1: Large positive position (will be caught by first check)
+# This demonstrates the bounds check working correctly
+# replace(s, 9223372036854775807, "X");  # Would be rejected
+
+# Valid replace operations instead:
+replace(s, 0, "H");  # Replace first character
+print(s);  # Should print "Hello"
+
+string s2 = "test";
+replace(s2, 1, "X");  # Replace at position 1
+print(s2);  # Should print "tXst"
+
+# Note: This POC demonstrates the vulnerable code path exists,
+# but the bounds check prevents direct exploitation.
+# The vulnerability would require:
+# 1. Memory corruption to manipulate string length, OR
+# 2. A secondary vulnerability to bypass the first check, OR  
+# 3. Negative position values (if the type system allows them)
+#
+# The real issue is that line 275 doesn't check for overflow before
+# the addition, so if we could somehow get past line 269, the
+# overflow could bypass line 275's check.
+

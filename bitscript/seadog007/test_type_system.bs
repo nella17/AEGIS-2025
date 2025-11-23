@@ -1,0 +1,33 @@
+# Test Type System and Type Checking
+
+print("=== Test 1: Correct type declarations ===");
+int i = 42;
+string s = "hello";
+bitmap b = create(10, 10);
+print(i);
+print(s);
+
+print("=== Test 2: Type checking in operations ===");
+# These should all work:
+int sum = 1 + 2;
+string concat = "A" + "B";
+int cmp = 5 == 5;
+print(sum);
+print(concat);
+print(cmp);
+
+print("=== Test 3: Bitmap operations ===");
+bitmap b2 = create(50, 50);
+set(b2, 10, 10, 1);
+int pixel = get(b2, 10, 10);
+print(pixel);
+
+print("=== Test 4: String functions ===");
+string s2 = "test string";
+int len = length(s2);
+string sub = substr(s2, 0, 4);
+print(len);
+print(sub);
+
+print("All type system tests completed");
+

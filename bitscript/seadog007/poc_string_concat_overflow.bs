@@ -1,0 +1,48 @@
+# POC 5: Integer Overflow in String Concatenation
+# Vulnerability: String concatenation doesn't check for overflow
+# When len1 + len2 overflows, it allocates wrong buffer size
+# This can lead to buffer overflow when copying strings
+
+# Create two very long strings
+# We need strings whose combined length overflows int64
+# Max int64 = 0x7FFFFFFFFFFFFFFF
+# So we need two strings with length > 0x3FFFFFFFFFFFFFFF each
+
+# However, string literals are limited to 255 bytes in the tokenizer
+# So we can't directly create such strings from literals
+
+# But we can use string operations to build them up
+# Or we can try to trigger it with substr/replace operations
+
+# Actually, the string structure stores length as QWORD (64-bit)
+# So we'd need to manipulate the string length somehow
+
+# Let's try a different approach - use string operations that might
+# allow us to create strings with large lengths
+
+# Note: This is harder to exploit directly because:
+# 1. String literals are limited to 255 bytes
+# 2. We'd need to manipulate internal string structures
+# 3. The concatenation happens in eval_binary_operator
+
+# But we can demonstrate the concept:
+string s1 = "A";
+string s2 = "B";
+
+# If we could somehow make s1 and s2 have very large lengths,
+# then s1 + s2 would overflow in the length calculation
+# Line 40: *(_QWORD *)v21 = *(_QWORD *)a18 + *(_QWORD *)a12;
+# If both lengths are 0x8000000000000000, sum wraps to 0
+# Then malloc(0 + 1) allocates 1 byte, but we try to copy both strings
+
+# Since we can't directly create such strings, this POC shows the
+# vulnerable code path conceptually
+
+string result = s1 + s2;
+print(result);
+
+# The vulnerability exists in the code, but requires manipulation
+# of string length fields which may not be directly accessible
+# from bitscript code. This would require memory corruption
+# or a secondary vulnerability to exploit.
+

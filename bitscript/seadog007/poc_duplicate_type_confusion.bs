@@ -1,0 +1,11 @@
+int x = 42;
+string x = "hello";
+print(x);
+bitmap y = create(10, 10);
+int y = 100;
+print(y);
+string z = "test";
+bitmap z = create(5, 5);
+print("Type confusion test completed");
+print("Multiple entries with same name but different types exist");
+

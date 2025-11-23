@@ -1,0 +1,33 @@
+# Test: Use-After-Free in Delete Statement
+#
+# Check if deleting a variable and then using it causes issues
+# This could lead to use-after-free vulnerabilities
+#
+# Note: delete appears to be a function call, not a statement
+# Syntax: delete(variable_name);
+
+print("=== Test 1: Delete then use ===");
+string s = "hello";
+delete(s);
+# Try to use s after deletion
+# This should either:
+# 1. Crash (use-after-free)
+# 2. Error gracefully ("Undefined variable")
+# 3. Work (if variable table entry isn't removed)
+
+print("=== Test 2: Delete bitmap then use ===");
+bitmap b = create(10, 10);
+set(b, 0, 0, 1);
+delete(b);
+# Try to use b after deletion
+int val = get(b, 0, 0);
+print(val);
+
+print("=== Test 3: Delete then reassign ===");
+int x = 42;
+delete(x);
+x = 100;  # Reassign after deletion
+print(x);
+
+print("Delete tests completed");
+

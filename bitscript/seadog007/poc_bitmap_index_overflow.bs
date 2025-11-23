@@ -1,0 +1,52 @@
+# POC 4: Missing Overflow Check in Bitmap Index Calculation
+# Vulnerability: bitmap_set() and bitmap_get() don't check for overflow
+# in the index calculation: y * width + x
+# Even if x and y are within bounds, the multiplication can overflow
+
+# Create a bitmap with large width
+# width = 0x10000 (65536), height = 1
+int b = create(65536, 1);
+
+# Now try to access with y = 0x10000
+# y * width = 0x10000 * 0x10000 = 0x100000000 wraps to 0
+# So we're accessing index 0 instead of the intended location
+# This can read/write wrong memory
+
+# Try to set a pixel at (0, 65536) - y is out of bounds but calculation wraps
+# The bounds check: y >= height should catch this (y=65536 >= 1)
+# But if we use y = 0x10000 / width trick, we might bypass
+
+# Actually, let's try with width that causes overflow in multiplication
+# width = 0x10000, y = 0x10000
+# y * width = 0x100000000 wraps to 0
+# But y >= height check will fail (0x10000 >= 1)
+
+# Better approach: use width and y values that are just within bounds
+# but their product overflows
+# width = 0x10000, y = 0x10000 (but this fails y < height check)
+
+# Actually the vulnerability is more subtle - if we can get past the
+# bounds check, the index calculation can still overflow
+# Let's try with values that pass bounds but overflow in calculation
+
+# width = 0x10000, height = 0x10000 (but this triggers create overflow)
+# So we need width and y where y < height but y * width overflows
+
+# This is tricky because if y < height and width is reasonable,
+# y * width shouldn't overflow. The issue is when width itself is large.
+
+# Let's demonstrate with a scenario where we create a bitmap
+# and then try to access it in a way that causes index overflow
+
+int b2 = create(0x10000, 2);
+# Now try: set(b2, 0, 0x10000, 1)
+# y = 0x10000, but height = 2, so bounds check should fail
+# But if there's a bug in bounds checking, this could overflow
+
+# The real issue: if width is 0x10000 and y is 0x10000,
+# y * width overflows even though y might be < height in some edge case
+# But the bounds check should prevent this...
+
+# Let's try a different approach - use create overflow to get a bitmap
+# with wrong dimensions, then access it
+

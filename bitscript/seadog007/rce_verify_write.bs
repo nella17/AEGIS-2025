@@ -1,0 +1,66 @@
+print("=== Verify Write ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapdataptr = targetaddr - 8192;
+print("Addresses:");
+print("value_ptr_addr:");
+print(valueptraddr);
+
+print("Creating bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Writing test value 0x41414141");
+
+int bitindex = 59712;
+set(b1, bitindex + 0, 0, 1);
+set(b1, bitindex + 1, 0, 0);
+set(b1, bitindex + 2, 0, 0);
+set(b1, bitindex + 3, 0, 0);
+set(b1, bitindex + 4, 0, 0);
+set(b1, bitindex + 5, 0, 0);
+set(b1, bitindex + 6, 0, 1);
+set(b1, bitindex + 7, 0, 0);
+set(b1, bitindex + 8, 0, 1);
+set(b1, bitindex + 9, 0, 0);
+set(b1, bitindex + 10, 0, 0);
+set(b1, bitindex + 11, 0, 0);
+set(b1, bitindex + 12, 0, 0);
+set(b1, bitindex + 13, 0, 0);
+set(b1, bitindex + 14, 0, 1);
+set(b1, bitindex + 15, 0, 0);
+set(b1, bitindex + 16, 0, 1);
+set(b1, bitindex + 17, 0, 0);
+set(b1, bitindex + 18, 0, 0);
+set(b1, bitindex + 19, 0, 0);
+set(b1, bitindex + 20, 0, 0);
+set(b1, bitindex + 21, 0, 0);
+set(b1, bitindex + 22, 0, 1);
+set(b1, bitindex + 23, 0, 0);
+set(b1, bitindex + 24, 0, 1);
+set(b1, bitindex + 25, 0, 0);
+set(b1, bitindex + 26, 0, 0);
+set(b1, bitindex + 27, 0, 0);
+set(b1, bitindex + 28, 0, 0);
+set(b1, bitindex + 29, 0, 0);
+set(b1, bitindex + 30, 0, 1);
+set(b1, bitindex + 31, 0, 0);
+
+print("Wrote 32 bits (0x41414141)");
+print("Reading back:");
+int test = target;
+print("test value:");
+print(test);
+print("Expected: 1094795585 (0x41414141)");
+if (test == 1094795585) {
+    print("SUCCESS! Addresses are correct!");
+} else {
+    print("Addresses might be wrong, or need adjustment");
+}
+

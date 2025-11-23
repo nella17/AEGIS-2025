@@ -1,0 +1,44 @@
+# Edge Case Tests for Bitscript Interpreter
+# These tests verify bounds checking and edge case handling
+
+print("=== Test 1: Bitmap at exact limit ===");
+bitmap b1 = create(8388608, 1);
+set(b1, 0, 0, 1);
+int val1 = get(b1, 0, 0);
+print(val1);
+
+print("=== Test 2: Bitmap just over limit (should fail) ===");
+# This should be rejected: 8388609 * 1 = 8388609 > 8388608
+# bitmap b2 = create(8388609, 1);  # Would fail
+
+print("=== Test 3: Large square bitmap near limit ===");
+# 2895 * 2895 = 8,381,025 < 8,388,608
+bitmap b3 = create(2895, 2895);
+set(b3, 0, 0, 1);
+set(b3, 2894, 2894, 1);
+int val3a = get(b3, 0, 0);
+int val3b = get(b3, 2894, 2894);
+print(val3a);
+print(val3b);
+
+print("=== Test 4: String operations ===");
+string s = "hello";
+string sub = substr(s, 0, 5);
+print(sub);
+replace(s, 0, "H");
+print(s);
+
+print("=== Test 5: String concatenation ===");
+string s1 = "A";
+string s2 = "B";
+string result = s1 + s2;
+print(result);
+
+print("=== Test 6: Bitmap get at edge ===");
+bitmap b4 = create(100, 100);
+set(b4, 99, 99, 1);
+int val4 = get(b4, 99, 99);
+print(val4);
+
+print("=== All edge case tests completed ===");
+

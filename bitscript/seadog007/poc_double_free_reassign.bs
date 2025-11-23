@@ -1,0 +1,20 @@
+print("=== Double Free via Reassignment ===");
+
+string s1 = "first";
+string s2 = "second";
+s2 = s1;
+
+print("Both s1 and s2 point to same string struct");
+
+print("Reassigning s2:");
+s2 = "new";
+print("s2:");
+print(s2);
+
+print("Reassigning s1 (should cause double free):");
+s1 = "other";
+print("s1:");
+print(s1);
+
+print("Double free via reassignment test completed");
+

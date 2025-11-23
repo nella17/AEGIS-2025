@@ -1,0 +1,60 @@
+# POC: Signed Integer Overflow in bitmap_create Bounds Check
+#
+# The vulnerability: Line 6 checks "a2 * a1 > 0x800000"
+# But if a2 * a1 OVERFLOWS in signed arithmetic, it wraps to negative
+# Negative numbers are NOT > 0x800000, so check passes incorrectly!
+#
+# This allows creating bitmaps with overflowed dimensions
+
+# Strategy: Find values where width * height overflows in signed 64-bit
+# but the overflowed result is negative or small, passing the check
+
+# In signed 64-bit:
+# INT64_MAX = 0x7FFFFFFFFFFFFFFF = 9,223,372,036,854,775,807
+# If a1 * a2 > INT64_MAX, it wraps to negative
+
+# Example attempt:
+# We need a1 * a2 to overflow but wrap to a value <= 0x800000
+# Or wrap to negative (which is < 0x800000)
+
+# Try: a1 = 0x100000000 (4294967296), a2 = 0x2000000 (33554432)
+# But bitscript doesn't support hex, so use decimal:
+# 4294967296 * 33554432 = would overflow
+
+# Actually, let's try smaller values that might cause signed overflow:
+# If we use values around 2^31, the product might overflow
+
+# Try: width = 2147483648 (2^31), height = 2
+# 2147483648 * 2 = 4294967296 (doesn't overflow)
+
+# Try: width = 2147483648, height = 2147483648  
+# This would be 2^62, which doesn't overflow in 64-bit
+
+# The trick: We need the MULTIPLICATION in the CHECK to overflow
+# If a2 * a1 overflows to negative in the comparison, check passes
+
+# Let's try values that cause signed overflow:
+# If both are around 0x80000000 (2^31), product = 2^62 (no overflow)
+# We need larger values...
+
+# Actually, the issue might be more subtle:
+# The check uses: a2 * a1 > 0x800000
+# If a2 * a1 overflows in SIGNED arithmetic during the comparison,
+# it might wrap to negative, making the check pass
+
+# Try maximum values:
+# INT64_MAX = 9223372036854775807
+# If we use a1 = INT64_MAX and a2 = 1, product = INT64_MAX (no overflow)
+# If we use a1 = INT64_MAX and a2 = 2, product overflows!
+
+# Test with large values:
+bitmap b1 = create(9223372036854775807, 2);
+# 9223372036854775807 * 2 = would overflow in signed arithmetic
+# If it wraps to negative, check passes!
+
+set(b1, 0, 0, 1);
+int val = get(b1, 0, 0);
+print(val);
+
+print("Testing signed overflow in bounds check");
+

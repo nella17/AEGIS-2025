@@ -1,0 +1,21 @@
+print("=== Double Free in Bitmap Assignment ===");
+
+bitmap b1 = create(10, 10);
+set(b1, 0, 0, 1);
+bitmap b2 = create(20, 20);
+set(b2, 5, 5, 1);
+
+print("b1 and b2 created");
+
+b2 = b1;
+
+print("After b2 = b1, both point to same bitmap struct");
+
+print("Deleting b2:");
+delete(b2);
+
+print("Deleting b1 (should cause double free):");
+delete(b1);
+
+print("This should crash before reaching here");
+

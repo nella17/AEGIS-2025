@@ -1,0 +1,30 @@
+# POC 1: Integer Overflow in bitmap_create
+# 
+# NOTE: This POC demonstrates the vulnerable code path, but the bounds
+# check actually catches large values correctly in 64-bit arithmetic.
+#
+# The vulnerability exists in the code logic:
+# - Line 6: Check uses `a2 * a1 > 0x800000` without overflow detection
+# - Line 19: `v2 = a2 * a1 + 7` can overflow
+# - Line 22: `malloc((int)(v2 >> 3))` uses the potentially overflowed value
+#
+# However, in practice:
+# - 65536 * 65536 = 4,294,967,296 (doesn't overflow in 64-bit)
+# - This is > 0x800000 (8,388,608), so check correctly rejects it
+#
+# The vulnerability would require:
+# 1. Values that multiply to > 2^63-1 (to overflow in 64-bit), OR
+# 2. A different code path that doesn't check properly, OR
+# 3. The check being bypassed through some other means
+#
+# This POC shows the code path exists but may not be directly exploitable
+# with simple large values due to the bounds check.
+
+# Attempt 1: Large values (will be caught by bounds check)
+# IMPORTANT: create() returns a bitmap, not an int!
+# bitmap b = create(65536, 65536);  # Would be rejected by bounds check
+
+# The real issue is that the code doesn't check for overflow BEFORE
+# the multiplication, so if there's any way to bypass the check,
+# the subsequent calculations can overflow.
+

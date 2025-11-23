@@ -1,0 +1,56 @@
+# Test: String Concatenation Overflow
+# 
+# The vulnerability: In eval_binary_operator line 40:
+#   *(_QWORD *)v21 = *(_QWORD *)a18 + *(_QWORD *)a12;
+# 
+# If len1 + len2 overflows, malloc allocates wrong size, then strcpy/strcat overflow.
+#
+# To trigger this, we need two strings whose lengths sum to > INT64_MAX.
+# Since string literals are limited to 255 bytes, we need to build up strings.
+#
+# Strategy: Build strings by repeated concatenation
+# Each concatenation doubles the length (approximately)
+
+# Start with small strings
+string s1 = "A";
+string s2 = "B";
+
+# Build up strings by concatenating
+# After N concatenations, length = 2^N
+# We need length > 0x3FFFFFFFFFFFFFFF to cause overflow when added
+
+# However, this would require many iterations and lots of memory.
+# Let's try a more practical approach - see if we can trigger it
+# with reasonable string sizes first.
+
+# Try building up to see what happens:
+string s3 = s1 + s2;  # length 2
+string s4 = s3 + s3;   # length 4
+string s5 = s4 + s4;   # length 8
+string s6 = s5 + s5;   # length 16
+string s7 = s6 + s6;   # length 32
+string s8 = s7 + s7;   # length 64
+string s9 = s8 + s8;   # length 128
+string s10 = s9 + s9;  # length 256
+
+# Continue building...
+# Note: This will use a lot of memory, but let's see if we can
+# eventually create strings large enough to cause overflow
+
+print("Building strings...");
+print(length(s10));
+
+# The real test would be:
+# string huge1 = ... (built up to ~0x8000000000000000)
+# string huge2 = ... (built up to ~0x8000000000000000)
+# string result = huge1 + huge2;  # Should overflow
+
+# But this requires building strings of 2^63 bytes each, which is
+# impractical due to memory constraints.
+
+# However, the vulnerability exists in the code - if we could somehow
+# manipulate string lengths (e.g., through memory corruption or a
+# secondary vulnerability), this could be exploited.
+
+print("String concatenation test completed");
+

@@ -1,0 +1,44 @@
+# POC: Valid Bitmap Creation Tests
+# These values pass the bounds check and can be used to test bitmap operations
+#
+# Bounds check: width * height <= 8388608 (0x800000)
+#
+# All these should work correctly:
+
+# Test 1: Small bitmap
+# IMPORTANT: create() returns a bitmap, not an int!
+bitmap b1 = create(100, 100);
+set(b1, 50, 50, 1);
+int val1 = get(b1, 50, 50);
+print(val1);
+
+# Test 2: Medium bitmap
+bitmap b2 = create(1024, 1024);
+set(b2, 512, 512, 1);
+int val2 = get(b2, 512, 512);
+print(val2);
+
+# Test 3: Large bitmap near limit
+# 4096 * 2047 = 8,384,512 < 8,388,608 ✓
+bitmap b3 = create(4096, 2047);
+set(b3, 0, 0, 1);
+int val3 = get(b3, 0, 0);
+print(val3);
+
+# Test 4: Maximum width, minimum height
+# 8388608 * 1 = 8,388,608 (exactly at limit) ✓
+bitmap b4 = create(8388608, 1);
+set(b4, 0, 0, 1);
+int val4 = get(b4, 0, 0);
+print(val4);
+
+# Test 5: Square bitmap near limit
+# sqrt(8388608) ≈ 2896
+# 2895 * 2895 = 8,381,025 < 8,388,608 ✓
+bitmap b5 = create(2895, 2895);
+set(b5, 100, 100, 1);
+int val5 = get(b5, 100, 100);
+print(val5);
+
+print("All valid bitmap tests completed");
+

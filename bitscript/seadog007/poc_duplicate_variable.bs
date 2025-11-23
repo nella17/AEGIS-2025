@@ -1,0 +1,13 @@
+int x = 1;
+int x = 2;
+int x = 3;
+int x = 4;
+int x = 5;
+print(x);
+string y = "first";
+string y = "second";
+print(y);
+bitmap z = create(10, 10);
+bitmap z = create(20, 20);
+print("Duplicate variable declaration test completed");
+

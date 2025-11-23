@@ -1,0 +1,31 @@
+# Test Limits and Boundary Conditions
+
+print("=== Testing bitmap creation limits ===");
+
+# Test 1: Maximum allowed (at limit)
+bitmap b1 = create(8388608, 1);
+print("Created bitmap at limit");
+
+# Test 2: Just under limit
+bitmap b2 = create(8388607, 1);
+print("Created bitmap just under limit");
+
+# Test 3: Square at limit
+# Find square root of 8388608 ≈ 2896
+# 2895 * 2895 = 8,381,025 < 8,388,608
+bitmap b3 = create(2895, 2895);
+print("Created square bitmap near limit");
+
+# Test 4: Test bitmap operations at edges
+set(b2, 8388606, 0, 1);
+int val = get(b2, 8388606, 0);
+print(val);
+
+# Test 5: String length limit
+# String literals are limited to 255 bytes in tokenizer
+string s = "This is a test string that should work fine";
+int len = length(s);
+print(len);
+
+print("All limit tests completed");
+

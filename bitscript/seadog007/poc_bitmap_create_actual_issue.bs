@@ -1,0 +1,45 @@
+# POC: Actual Integer Overflow Issue in bitmap_create
+#
+# After testing, the bounds check at line 6 prevents direct exploitation.
+# However, the code still has a vulnerability in its logic:
+#
+# The issue: The code doesn't check for overflow BEFORE the multiplication
+# in the bounds check. While this doesn't allow direct exploitation due to
+# the limit, it's still a code quality issue.
+#
+# More importantly, there's a potential issue at line 19-22:
+#   v2 = a2 * a1 + 7;
+#   if ( v2 < 0 )  // Overflow detection
+#       v2 = a2 * a1 + 14;
+#   malloc((int)(v2 >> 3));
+#
+# If a2 * a1 is close to INT_MAX, adding 7 could overflow.
+# But the check at line 6 limits a2 * a1 to 0x800000, so this is safe.
+
+# The REAL vulnerability might be in how the bitmap is used after creation.
+# If we can create a bitmap with specific dimensions that cause issues
+# in bitmap_set or bitmap_get, that's where the overflow would matter.
+
+# Try creating bitmaps at the limit:
+# Note: bitscript doesn't support hex literals, use decimal
+# 0x800000 = 8388608
+# IMPORTANT: create() returns a bitmap, not an int!
+bitmap b1 = create(8388608, 1);
+# This passes: 8388608 * 1 = 8388608, and 8388608 > 8388608 is false
+# v2 = 8388608 + 7 = 8388615
+# malloc(8388615 >> 3) = malloc(1048576) = malloc(1048576)
+
+set(b1, 0, 0, 1);
+int val = get(b1, 0, 0);
+print(val);
+
+# Try with a large width:
+# 0x7FFFFF = 8388607 (just under limit)
+bitmap b2 = create(8388607, 1);
+set(b2, 8388606, 0, 1);  # x near width limit
+# In bitmap_set: index = y * width + x = 0 * 8388607 + 8388606
+# This should be fine, but if there's any miscalculation...
+int val2 = get(b2, 8388606, 0);
+print(val2);
+
+print("POC completed");

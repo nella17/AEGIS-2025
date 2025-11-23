@@ -1,0 +1,21 @@
+string cmd = "/bin/sh";
+bitmap b1 = create(9223372036854775807, 2);
+
+int safebit = get(b1, 0, 0);
+print(safebit);
+
+int bit1 = get(b1, 1, 0);
+int bit2 = get(b1, 2, 0);
+int bit3 = get(b1, 3, 0);
+print(bit1);
+print(bit2);
+print(bit3);
+
+int bit8 = get(b1, 8, 0);
+int bit16 = get(b1, 16, 0);
+int bit24 = get(b1, 24, 0);
+print(bit8);
+print(bit16);
+print(bit24);
+
+print("Safe OOB read test completed");

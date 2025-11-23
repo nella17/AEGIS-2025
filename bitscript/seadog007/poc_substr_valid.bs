@@ -1,0 +1,27 @@
+# POC: Valid Substr Operations
+# These demonstrate normal substr functionality with proper bounds
+
+string s = "hello world";
+
+# Test 1: Get substring from start
+string sub1 = substr(s, 0, 5);
+print(sub1);  # Should print "hello"
+
+# Test 2: Get substring from middle
+string sub2 = substr(s, 6, 5);
+print(sub2);  # Should print "world"
+
+# Test 3: Get single character
+string sub3 = substr(s, 0, 1);
+print(sub3);  # Should print "h"
+
+# Test 4: Get substring at end
+string sub4 = substr(s, 10, 1);
+print(sub4);  # Should print "d"
+
+# Test 5: Get entire string
+string sub5 = substr(s, 0, 11);
+print(sub5);  # Should print "hello world"
+
+print("All valid substr tests completed");
+

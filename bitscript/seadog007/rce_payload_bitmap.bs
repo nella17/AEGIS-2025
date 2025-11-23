@@ -1,0 +1,10 @@
+bitmap b1 = create(9223372036854775807, 2);
+
+string cmd = "/bin/sh";
+
+set(b1, 0, 1, 1);
+
+int val = get(b1, 0, 1);
+print(val);
+
+print("RCE payload test completed");

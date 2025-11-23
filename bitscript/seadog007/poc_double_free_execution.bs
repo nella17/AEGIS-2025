@@ -1,0 +1,16 @@
+print("=== Double Free During Execution ===");
+
+string s1 = "first";
+string s2 = "second";
+s2 = s1;
+
+print("Both s1 and s2 point to same string struct");
+
+print("Deleting s1:");
+delete(s1);
+
+print("Deleting s2 (should cause double free):");
+delete(s2);
+
+print("This should crash before reaching here");
+

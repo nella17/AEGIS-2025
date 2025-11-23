@@ -1,0 +1,19 @@
+print("=== Self-Assignment Double Free Test (Bitmap) ===");
+
+bitmap b1 = create(10, 10);
+set(b1, 0, 0, 1);
+print("Before self-assignment:");
+int val1 = get(b1, 0, 0);
+print(val1);
+
+b1 = b1;
+
+print("After b1 = b1:");
+int val2 = get(b1, 0, 0);
+print(val2);
+
+print("Deleting b1 (should cause double free if self-assignment freed it):");
+delete(b1);
+
+print("This should crash if self-assignment causes double free");
+

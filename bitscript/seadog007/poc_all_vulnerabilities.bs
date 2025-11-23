@@ -1,0 +1,36 @@
+# Combined POC: Tests various code paths
+# Note: Most overflow attempts are prevented by bounds checks
+# This demonstrates the code paths exist but are protected
+
+print("=== Test: Bitmap Create (will be rejected) ===");
+# This will be rejected: 65536 * 65536 = 4,294,967,296 > 8,388,608
+# int b = create(65536, 65536);  # Commented out - would fail
+
+# Valid bitmap creation instead:
+# IMPORTANT: create() returns a bitmap, not an int!
+bitmap b = create(4096, 2047);
+set(b, 0, 0, 1);
+int val = get(b, 0, 0);
+print(val);
+
+print("=== Test: Substr (bounds check prevents overflow) ===");
+string s1 = "test";
+# Large values are caught by bounds checks
+string sub = substr(s1, 0, 2);
+print(sub);
+
+print("=== Test: Replace (bounds check prevents overflow) ===");
+string s2 = "hello";
+# Large values are caught by bounds checks  
+replace(s2, 0, "H");
+print(s2);
+
+print("=== Test: String Concatenation ===");
+string s3 = "A";
+string s4 = "B";
+string result = s3 + s4;
+print(result);
+
+print("=== All tests completed ===");
+print("Note: Bounds checks prevent direct exploitation of overflow issues");
+

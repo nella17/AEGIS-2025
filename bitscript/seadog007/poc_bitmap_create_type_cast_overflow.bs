@@ -1,0 +1,39 @@
+# POC: Type Cast Overflow in bitmap_create
+#
+# The REAL vulnerability is at line 22:
+#   malloc((int)(v2 >> 3));
+#
+# The issue: v2 is __int64 (64-bit), but it's cast to (int) (32-bit)
+# This can cause truncation/overflow when casting large values.
+#
+# However, the bounds check at line 6 limits a2 * a1 to 0x800000,
+# so v2 = a2 * a1 + 7 is at most 0x800007.
+# After >> 3, that's 0x100000, which fits in a 32-bit int.
+#
+# So the type cast issue doesn't manifest with the current bounds.
+
+# The bounds check prevents exploitation, but the code still has issues:
+# 1. No overflow check before multiplication in the bounds check
+# 2. Type cast from 64-bit to 32-bit without checking range
+# 3. The overflow detection at line 20 happens AFTER the calculation
+
+# To demonstrate the code quality issue, try values at the limit:
+# Note: bitscript doesn't support hex literals, use decimal
+# 0x800000 = 8388608
+# IMPORTANT: create() returns a bitmap, not an int!
+bitmap b1 = create(8388608, 1);
+# This should pass: 8388608 * 1 = 8388608
+# Check: 8388608 > 8388608 = false, so it passes
+# v2 = 8388608 + 7 = 8388615
+# malloc((int)(8388615 >> 3)) = malloc(1048576) = malloc(1048576)
+
+set(b1, 0, 0, 1);
+int val = get(b1, 0, 0);
+print(val);
+
+# The vulnerability exists in the code logic but is prevented by
+# the bounds check. If the bounds check could be bypassed or if
+# the limit was higher, this would be exploitable.
+
+print("POC completed - bounds check prevents exploitation");
+

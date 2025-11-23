@@ -1,0 +1,32 @@
+# POC: Successful Bitmap Creation at Limit
+# This demonstrates that bitmap operations work correctly
+# when values are within the bounds limit
+
+# Test 1: Bitmap at exact limit
+# 8388608 * 1 = 8388608 (exactly at limit 0x800000)
+bitmap b1 = create(8388608, 1);
+set(b1, 0, 0, 1);
+int val1 = get(b1, 0, 0);
+print(val1);  # Should print 1
+
+# Test 2: Bitmap just under limit
+# 4096 * 2047 = 8,384,512 < 8,388,608
+bitmap b2 = create(4096, 2047);
+set(b2, 100, 100, 1);
+int val2 = get(b2, 100, 100);
+print(val2);  # Should print 1
+
+# Test 3: Multiple operations on same bitmap
+bitmap b3 = create(100, 100);
+set(b3, 10, 10, 1);
+set(b3, 20, 20, 1);
+set(b3, 30, 30, 1);
+int val3a = get(b3, 10, 10);
+int val3b = get(b3, 20, 20);
+int val3c = get(b3, 30, 30);
+print(val3a);  # Should print 1
+print(val3b);  # Should print 1
+print(val3c);  # Should print 1
+
+print("All bitmap tests successful");
+

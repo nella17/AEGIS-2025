@@ -1,0 +1,28 @@
+print("=== Leak printf Address Instead ===");
+
+print("We already have printf offset (0x60100)");
+print("So if we leak printf, calculation is easier");
+
+print("Step 1: Try to leak printf address");
+print("Method 1: Corrupt variable.value_ptr to printf@GOT");
+print("Method 2: Use type confusion to read from GOT");
+print("Method 3: Use OOB read to read from GOT");
+
+print("Step 2: If we can corrupt variable entry");
+print("Set value_ptr to printf@GOT (0x409048)");
+print("Then read: int libcprintf = variable;");
+print("This gives us printf address directly");
+
+print("Step 3: Calculate system");
+print("libc_base = libcprintf - 0x60100");
+print("system_addr = libc_base + 0x58750");
+
+print("Step 4: Write system to GOT");
+print("Write system_addr to printf@GOT (0x409048)");
+
+print("Step 5: Trigger");
+print("print with /bin/sh");
+
+print("Note: We have libc leak (setvbuf), but printf would be easier");
+print("to calculate from since we know its offset");
+

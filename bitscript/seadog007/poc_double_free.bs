@@ -1,0 +1,24 @@
+print("=== Double Free POC ===");
+
+string s1 = "first";
+string s2 = "second";
+print("s1:");
+print(s1);
+print("s2:");
+print(s2);
+
+s2 = s1;
+print("After s2 = s1:");
+print("s1:");
+print(s1);
+print("s2:");
+print(s2);
+
+print("Deleting s2:");
+delete(s2);
+
+print("Deleting s1 (should cause double free):");
+delete(s1);
+
+print("Double free test completed");
+

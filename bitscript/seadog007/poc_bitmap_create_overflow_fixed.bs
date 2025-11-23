@@ -1,0 +1,62 @@
+# POC: Integer Overflow in bitmap_create - Corrected Analysis
+# 
+# The vulnerability exists, but requires specific conditions:
+# The check is: a2 * a1 > 0x800000 (8,388,608)
+# 
+# For overflow to bypass the check, we need:
+# - width * height to overflow and wrap to a value <= 0x800000
+# - But in 64-bit arithmetic, this is very difficult
+#
+# However, there's a SECOND overflow point at line 19:
+#   v2 = a2 * a1 + 7;
+#   if ( v2 < 0 )  // This checks for overflow!
+#       v2 = a2 * a1 + 14;
+#
+# The issue: If a2 * a1 overflows in the CHECK (line 6), it might pass
+# incorrectly, but then the code tries to handle overflow at line 20.
+#
+# Actually, the real vulnerability might be in the allocation:
+#   malloc((int)(v2 >> 3));
+# If v2 is negative or wraps, this allocates wrong size.
+
+# Try values that are just under the limit but cause issues:
+# We need width * height <= 0x800000 to pass the check
+# 0x800000 = 8,388,608
+# So we can use: width = 4096, height = 2048
+# 4096 * 2048 = 8,388,608 exactly (passes check: 8388608 > 8388608 is false)
+
+# But wait, that's exactly at the limit. Let's try something smaller:
+# IMPORTANT: create() returns a bitmap, not an int!
+bitmap b1 = create(4096, 2047);
+# 4096 * 2047 = 8,384,512 < 0x800000, so it passes
+set(b1, 0, 0, 1);
+int val1 = get(b1, 0, 0);
+print(val1);
+
+# The vulnerability might be more subtle - it could be that the
+# multiplication in the check uses a different type or has different
+# overflow behavior than the multiplication used later.
+#
+# Actually, looking more carefully: the check uses signed comparison,
+# and if we can make width * height overflow to a negative number
+# in some way, it might bypass the check.
+#
+# But with positive values, this is hard. The vulnerability might
+# require negative values or a different attack vector.
+
+# Alternative: Try to find edge cases where the calculation
+# at line 19 overflows even though the check passed
+# Note: bitscript doesn't support hex literals, use decimal
+bitmap b2 = create(8388608, 1);
+# This should pass: 8388608 * 1 = 8388608, and 8388608 > 8388608 is false
+# But then v2 = 8388608 * 1 + 7 = 8388615, which is fine
+set(b2, 0, 0, 1);
+int val2 = get(b2, 0, 0);
+print(val2);
+
+# The real issue might be if we can somehow get past the check
+# with values that cause the later calculation to overflow
+# But this seems difficult with the current bounds.
+
+print("POC executed - check if heap corruption occurred");
+
