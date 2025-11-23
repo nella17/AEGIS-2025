@@ -15,6 +15,7 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
+import pwn
 
 class BitScriptWrapper:
     def __init__(self, bitscript_path="./bitscript"):
@@ -29,7 +30,7 @@ class BitScriptWrapper:
         """Calculate script size in bytes."""
         return len(script_content.encode('utf-8'))
     
-    def run_script(self, script_content, show_output=True, capture_output=True):
+    def run_script(self, script_content, show_output=True, capture_output=True, pause=False):
         """
         Run a BitScript program.
         
@@ -58,6 +59,9 @@ class BitScriptWrapper:
                 cwd=os.path.dirname(self.bitscript_path) or ".",
                 bufsize=0  # Unbuffered for immediate input
             )
+
+            if pause:
+                pwn.pause()
             
             stdout, _ = process.communicate(input=input_data, timeout=30)
             
@@ -92,7 +96,7 @@ class BitScriptWrapper:
                 print(f"ERROR: {e}", file=sys.stderr)
             return -1, "", str(e)
     
-    def test_file(self, script_file, show_output=True):
+    def test_file(self, script_file, show_output=True, pause=False):
         """Run a script from a file."""
         try:
             with open(script_file, 'r', encoding='utf-8') as f:
@@ -102,7 +106,7 @@ class BitScriptWrapper:
             print(f"Size: {self.calculate_size(script_content)} bytes")
             print("-" * 60)
             
-            exit_code, stdout, stderr = self.run_script(script_content, show_output)
+            exit_code, stdout, stderr = self.run_script(script_content, show_output, pause=pause)
             
             print("-" * 60)
             if exit_code == 0:
@@ -121,12 +125,12 @@ class BitScriptWrapper:
             print(f"ERROR: {e}", file=sys.stderr)
             return False
     
-    def test_string(self, script_content, show_output=True):
+    def test_string(self, script_content, show_output=True, pause=False):
         """Run a script from a string."""
         print(f"Size: {self.calculate_size(script_content)} bytes")
         print("-" * 60)
         
-        exit_code, stdout, stderr = self.run_script(script_content, show_output)
+        exit_code, stdout, stderr = self.run_script(script_content, show_output, pause=pause)
         
         print("-" * 60)
         if exit_code == 0:
@@ -185,6 +189,12 @@ Examples:
         help='Show detailed information'
     )
     
+    parser.add_argument(
+        '--pause', '-p',
+        action='store_true',
+        help='pause'
+    )
+    
     args = parser.parse_args()
     
     try:
@@ -201,11 +211,11 @@ Examples:
             if args.verbose:
                 print("Reading script from stdin...")
             script_content = sys.stdin.read()
-            success = wrapper.test_string(script_content, show_output=not args.quiet)
+            success = wrapper.test_string(script_content, show_output=not args.quiet, pause=args.pause)
             results.append(('stdin', success))
         else:
             # Read from file
-            success = wrapper.test_file(script_arg, show_output=not args.quiet)
+            success = wrapper.test_file(script_arg, show_output=not args.quiet, pause=args.pause)
             results.append((script_arg, success))
         
         if len(args.scripts) > 1:
