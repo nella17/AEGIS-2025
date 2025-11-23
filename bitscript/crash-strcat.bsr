@@ -1,0 +1,11 @@
+string s1 = "A";
+string s2 = "B";
+s2 = "B";
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+s2 = s2 + s2;
+string s3 = s1 + s2;
