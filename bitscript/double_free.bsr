@@ -1,0 +1,7 @@
+string s1 = "first";
+string s2 = "second";
+s2 = s1;
+print("s1:");
+print(s1);
+print("s2:");
+print(s2);
