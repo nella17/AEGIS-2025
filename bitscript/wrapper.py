@@ -51,21 +51,18 @@ class BitScriptWrapper:
         
         try:
             # Run bitscript
-            process = subprocess.Popen(
-                [self.bitscript_path],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,  # Merge stderr into stdout to capture all output
-                cwd=os.path.dirname(self.bitscript_path) or ".",
-                bufsize=0  # Unbuffered for immediate input
-            )
+            io = pwn.process(self.bitscript_path)
 
+            timeout = 30
             if pause:
                 pwn.pause()
+                timeout = None
+
+            io.send(input_data)
             
-            stdout, _ = process.communicate(input=input_data, timeout=30)
+            stdout = io.recvall(timeout)
             
-            exit_code = process.returncode
+            exit_code = io.poll()
             
             # Decode output
             stdout_text = stdout.decode('utf-8', errors='replace') if stdout else ""
@@ -86,11 +83,6 @@ class BitScriptWrapper:
             
             return exit_code, stdout_text, ""
             
-        except subprocess.TimeoutExpired:
-            process.kill()
-            if show_output:
-                print("ERROR: Script execution timed out (>30 seconds)", file=sys.stderr)
-            return -1, "", "Timeout"
         except Exception as e:
             if show_output:
                 print(f"ERROR: {e}", file=sys.stderr)
