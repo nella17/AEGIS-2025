@@ -1,0 +1,31 @@
+int x = 5;
+string s = "hello" + " world";
+bitmap b = create(4, 4);
+set(b, 1, 1, 1);
+print(get(b,1,1));
+print("SSSSS");
+display(b);
+if (x > 3) {
+  print(s);
+}
+else {
+  print("small");
+}
+while (x > 0) {
+  print(x);
+  x = x - 1;
+}
+print(substr(s,2,3));
+print(length(s));
+delete(s);
+string s = "hello" + " world";
+delete(s);
+string s = "hello" + " world";
+print("============================");
+x=9;
+while (x > 0) {
+    print(x);
+    x = x - 1;
+}
+print(22/2);
+print(22%33);

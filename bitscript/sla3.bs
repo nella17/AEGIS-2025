@@ -1,0 +1,16 @@
+371           
+string drgaAyOX = "CEAslRcADdmKsyLuNMWC" ;
+print(drgaAyOX);
+int jczmwNffY = -20061708 * -36530524 + -20061708;
+print(jczmwNffY);
+replace(drgaAyOX,3,"qNfYU");
+print(drgaAyOX);
+bitmap bbb = create(100,100);
+set(bbb,30,30,1);
+bitmap bbbb = bbb;
+print(get(bbbb,30,30));
+print(get(bbbb,30,40));
+string qqqq = "DDDDDDD" ;
+qqqq = drgaAyOX ; 
+print(qqqq);
+print(length(drgaAyOX));

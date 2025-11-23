@@ -1,0 +1,16 @@
+bitmap a = create(1000,8000);
+delete(a);
+int aa=0;
+bitmap b = create(1000,8000);
+delete(b);
+int bb=0;
+bitmap c = create(1000,8000);
+delete(c);
+int cc=0;
+bitmap d = create(1000,8000);
+delete(d);
+int dd=0;
+bitmap e = create(1000,8000);
+delete(e);
+int ee=0;
+print(123);
